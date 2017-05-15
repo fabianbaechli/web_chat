@@ -1,0 +1,22 @@
+{
+  "name": "web_chat",
+  "version": "1.0.0",
+  "description": "A chat application running in the browser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {p
+    "type": "git",
+    "url": "git+https://github.com/fabianbaechli/web_chat.git"
+  },
+  "author": "Fabian Bächli",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabianbaechli/web_chat/issues"
+  },
+  "homepage": "https://github.com/fabianbaechli/web_chat#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
