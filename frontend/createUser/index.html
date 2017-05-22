@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Create A Web Chat User!</title>
+   <link rel="stylesheet" href="style.css">
+   <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+   <form action="http://192.168.201.156:8080/createUser" method="post">
+      <div id = "createUserArea">
+         <p id = "welcomeSentence">Create your User Account</p>
+         <input id = "fullNameTextField" name = "fullName" placeholder="Full Name" type="text" required="">
+         <input id = "emailTextField" name = "email" placeholder="Email" type="text" required="">
+         <input id = "usernameTextField" name = "username" placeholder="Username" type="text" required="">
+         <input id = "passwordTextField" name = "password" placeholder="Password" type="password" required="">
+         <input id = "passwordRetypeTextField" name = "retypePassword" placeholder="Retype Password" type="password" required="">
+
+         <button type="submit" class="button"><span>Create User!</span></button>
+      </div>
+   </form>
+</body>
+</html>
