@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {p
+  "repository": {
     "type": "git",
     "url": "git+https://github.com/fabianbaechli/web_chat.git"
   },
@@ -17,6 +17,21 @@
   },
   "homepage": "https://github.com/fabianbaechli/web_chat#readme",
   "dependencies": {
-    "express": "^4.15.2"
-  }
+      "bcrypt": "*",
+      "better-js-class": "*",
+      "body-parser": "*",
+      "cps": "*",
+      "dotenv": "*",
+      "ejs": "*",
+      "express": "*",
+      "express-jwt": "*",
+      "express-session": "*",
+      "fs": "0.0.1-security",
+      "http": "0.0.0",
+      "ldapjs": "*",
+      "lru-cache": "*",
+      "mysql": "*",
+      "sha256": "^0.2.0",
+      "underscore": "*"
+   }
 }

@@ -6,12 +6,12 @@
    <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
-   <form action="http://192.168.201.156:8080/login" method="post">
+   <form action="http://localhost:8080/login" method="post">
       <div id = "loginArea">
          <p id = "welcomeSentence">Welcome to Web-Chat!</p>
          <input id = "usernameTextField" name = "username" placeholder="Username" type="text" required="">
          <input id = "passwordTextField" name = "password" placeholder="Password" type="password" required="">
-         <a href = "localhost:8080/createUser"> Not a user? </a>
+         <a href = "http://localhost:8080/createUser"> Not a user? </a>
          <button type="submit" class="button"><span>Login </span></button>
       </div>
    </form>
