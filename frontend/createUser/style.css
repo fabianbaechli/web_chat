@@ -14,10 +14,6 @@ body {
    border-radius: 1.5%;
    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.5), 0 15px 12px rgba(0, 0, 0, 0.22); }
 
-#passwordTextField {
-   margin-bottom: 20px;
-}
-
 #welcomeSentence {
    font-family: 'roboto-thin', sans-serif;
    font-size: 30px;
@@ -49,9 +45,6 @@ input::-webkit-input-placeholder {
    font-family: 'roboto-light', sans-serif;
    -webkit-transition: all 0.3s ease-in-out;
    transition: all 0.3s ease-in-out; }
-
-#usernameTextField {
-   margin-top: 7%; }
 
 a {
    margin-left: 40%; }
