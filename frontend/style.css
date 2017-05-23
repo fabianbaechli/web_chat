@@ -59,7 +59,9 @@ a {
 a:-webkit-any-link {
    font-size: 14px;
    font-family: 'roboto-light', sans-serif;
-   text-decoration: none; }
+   text-decoration: none;
+   text-align: center;
+}
 
 input {
    margin-left: 35%;

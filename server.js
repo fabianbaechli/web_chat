@@ -8,6 +8,8 @@ var sha256        = require('sha256')
 var mysql         = require('mysql')
 require('dotenv').config()
 
+var session;
+
 // mysql connection
 var connection = mysql.createConnection({
    host: "localhost",
@@ -16,6 +18,11 @@ var connection = mysql.createConnection({
    database: "web_chat"
 });
 connection.connect();
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({
+   extended: true
+}))
 
 // Cookie settings for session
 app.use(session({
@@ -31,6 +38,7 @@ app.use(session({
 app.use(express.static('frontend'))
 
 app.get("/", (request, response) => {
+   session = request.session
    if (isLoggedIn(request)) {
       response.redirect("/main_page")
    } else {
@@ -39,15 +47,33 @@ app.get("/", (request, response) => {
 })
 
 app.post("/login", (request, response) => {
-   console.log(request.body.username);
+   session = request.session
+   var username = request.body.username;
+   var password = request.body.password;
+   var queryString = "SELECT * FROM users WHERE user_name = " + connection.escape(username);
+   connection.query(queryString, (error, results, fields) => {
+      if (error)
+         throw error
+      if (results.length == 0)
+         response.redirect("/")
+      else {
+         if (results[0].password === password) {
+            session.username = username;
+            response.send("logged in!")
+//            response.redirect("/main_page")
+         }
+         else
+            response.redirect("/")
+      }
+   })
 })
 
 function isLoggedIn(request) {
-   var session = request.session;
+   session = request.session;
    if (session.username) {
-      return true;
+      return true
    } else {
-      return false;
+      return false
    }
 }
 
