@@ -6,11 +6,11 @@
     <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
-<form action="http://localhost:8080/createUser" method="post">
+<form onsubmit="return checkFormAndSubmit()" method="post">
     <div id="createUserArea">
         <p id="welcomeSentence">Create your User Account</p>
-        <input id="fullNameTextField" name="fullName" placeholder="Full Name" type="text" required="">
-        <input id="emailTextField" name="email" placeholder="Email" type="text" required="">
+        <input id="fullNameTextField" name="fullName" placeholder="Full Name" type="text" required="" onfocusout="checkName()">
+        <input id="emailTextField" name="email" placeholder="Email" type="email" required="">
         <input id="usernameTextField" name="username" placeholder="Username" type="text" required="">
         <input id="passwordTextField" name="password" placeholder="Password" type="password" required="">
         <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"

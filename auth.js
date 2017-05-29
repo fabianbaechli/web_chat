@@ -14,7 +14,7 @@ router.use(session({
 }));
 
 // Check if the user is logged in
-router.use("/auth/login", function (req, res, next) {
+router.use("/auth/login", function (req, res) {
     console.log("login attempt");
     // Only login if the user is not authenticated
     if (!req.session.authenticated) {
@@ -56,7 +56,7 @@ router.use('/auth/logout', function (req, res) {
 
 router.use('/auth/status', function (req, res) {
     res.json({
-        authenticated: req.session.authenticated,
+        authenticated: req.session.authenticated
     });
 });
 
