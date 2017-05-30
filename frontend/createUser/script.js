@@ -13,9 +13,6 @@ function checkName() {
 
     if (!regex.test(element.value)) {
         element.style.borderBottomColor = "red";
-        element.style.background.linear
-        element.style.background.color = "red";
     } else {
-
     }
 }
