@@ -78,7 +78,7 @@ input {
 input:focus, input:valid {
     box-shadow: none;
     outline: none;
-    border-bottom: solid 3px #1abc9c;
+    border-bottom: solid 2px #1abc9c;
     background-position: 0 0;
 }
 

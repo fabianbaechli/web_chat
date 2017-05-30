@@ -1,10 +1,10 @@
+var fields = {fullName: false, email: false, username: false, password: false, retypePassword: false};
 function checkFormAndSubmit() {
-    var fullName = document.getElementById("fullNameTextField").value;
-    var email = document.getElementbyId("emailTextField").value;
-    var username = document.getElementById("usernameTextField").value;
-    var password = document.getElementbyId("passwordTextField").value;
-    var retypePassword = document.getElementbyId("passwordRetypeTextField").value;
-
+    for (var i = 0; i < fields.size; i++) {
+        if (fields[i] === false) {
+            window.alert("")
+        }
+    }
 }
 
 function checkName() {
@@ -13,6 +13,21 @@ function checkName() {
 
     if (!regex.test(element.value)) {
         element.style.borderBottomColor = "red";
+        fields.fullName = false;
     } else {
+        element.style.borderBottomColor = "#1abc9c";
+        fields.fullName = true;
+    }
+    function checkEmail() {
+
+    }
+    function checkUsername() {
+
+    }
+    function checkPassword() {
+
+    }
+    function checkRetypePassword() {
+
     }
 }

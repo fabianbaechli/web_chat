@@ -9,12 +9,16 @@
 <form onsubmit="return checkFormAndSubmit()" method="post">
     <div id="createUserArea">
         <p id="welcomeSentence">Create your User Account</p>
-        <input id="fullNameTextField" name="fullName" placeholder="Full Name" type="text" required="" onfocusout="checkName()">
-        <input id="emailTextField" name="email" placeholder="Email" type="email" required="">
-        <input id="usernameTextField" name="username" placeholder="Username" type="text" required="">
-        <input id="passwordTextField" name="password" placeholder="Password" type="password" required="">
+        <input id="fullNameTextField" name="fullName" placeholder="Full Name" type="text" required=""
+               onfocusout="checkName()">
+        <input id="emailTextField" name="email" placeholder="Email" type="email" required=""
+               onfocusout="checkEmail()">
+        <input id="usernameTextField" name="username" placeholder="Username" type="text" required=""
+               onfocusout="checkUsername()">
+        <input id="passwordTextField" name="password" placeholder="Password" type="password" required=""
+               onfocusout="checkPassword()">
         <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"
-               required="">
+               required="" onfocusout="checkRetypePassword()">
         <button type="submit" class="button"><span>Create User!</span></button>
     </div>
 </form>
