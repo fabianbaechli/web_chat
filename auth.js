@@ -3,6 +3,7 @@ const session = require("express-session");
 const router = new express.Router();
 const db = require("./db.js");
 require('dotenv').config();
+
 // cookie settings
 router.use(session({
     secret: process.env.COOKIE_SECRET,

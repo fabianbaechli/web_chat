@@ -17,6 +17,7 @@ app.use(bodyParser.urlencoded({
 // All files in the frontend folder are available without a cookie
 app.use(express.static('frontend'));
 
+// Handles authentication
 app.use(auth.router);
 
 app.post("/createUser", function (req, res) {

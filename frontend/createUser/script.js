@@ -19,15 +19,15 @@ function checkName() {
         fields.fullName = true;
     }
     function checkEmail() {
-
+        console.log("email");
     }
     function checkUsername() {
-
+        console.log("username");
     }
     function checkPassword() {
-
+        console.log("password");
     }
     function checkRetypePassword() {
-
+        console.log("retype password");
     }
 }
