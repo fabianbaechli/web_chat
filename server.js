@@ -31,7 +31,6 @@ app.post("/createUser", function (req, res) {
         "(" + fullName + "," + username + "," + password + "," + email + ")";
 
     db.query("SELECT * FROM users WHERE user_name = " + username, function (error, results) {
-        console.log("test");
         if (error) {
             console.log(error);
         } else {
