@@ -28,18 +28,18 @@ app.post("/createUser", function (req, res) {
     password = db.escape(password);
 
     var queryString = "INSERT INTO users (full_name, user_name, password, email) VALUES " +
-        "("+fullName+","+username+","+password+","+email+")";
+        "(" + fullName + "," + username + "," + password + "," + email + ")";
 
-    db.query("SELECT * FROM users WHERE user_name = "+username, function(error, results) {
+    db.query("SELECT * FROM users WHERE user_name = " + username, function (error, results) {
         if (error) {
             console.log(error);
         } else {
             if (results.length === 0) {
-                db.query(queryString, function() {
+                db.query(queryString, function () {
                     console.log("created user");
                     res.json({userCreated: true});
                 })
-            } else  {
+            } else {
                 res.json({userCreated: false, message: "username already taken"});
             }
         }
