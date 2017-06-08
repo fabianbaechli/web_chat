@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log(content);
     if (Object.keys(content).length !== 0) {
         console.log("authenticated mydude");
+        content = {id: 312, room_name: "we dem boyes", participants: "boye 1, bleep bloop, S U C C, ^^23i0ä"};
+        for (var i = 0; i < 2; i++) {
+            displayContent(content);
+        }
     } else {
         console.log("not authenticated hombre");
     }
@@ -19,9 +23,9 @@ function displayContent(content) {
         cells[i] = document.createElement("td");
     }
     var values = {
-        0: content.name_lieferant,
-        1: content.art_nr,
-        2: content.beschreibung,
+        0: content.id,
+        1: content.room_name,
+        2: content.participants
     };
 
     for (i = 0; i < cells.length; i++) {
@@ -30,7 +34,7 @@ function displayContent(content) {
     for (i = 0; i < cells.length; i++) {
         row.appendChild(cells[i])
     }
-
+    row.style.backgroundColor = "#B0BEC5";
     row.ondblclick = function () {
         // TODO: dialog to create chat room
     };

@@ -56,7 +56,7 @@ th {
 
 td {
     font-weight: lighter;
-    text-align: left;
+    border-bottom: 1px solid white;
 }
 
 tr:hover {
@@ -64,8 +64,8 @@ tr:hover {
 }
 
 td, th {
-    border-bottom: 1px solid #dddddd;
     height: 5%;
+    text-align: center;
     padding: 8px;
 }
 
