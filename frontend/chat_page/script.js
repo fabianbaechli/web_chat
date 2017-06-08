@@ -1,6 +1,6 @@
 // On document load
 var content;
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     content = JSON.parse(httpRequest("/chat_page/chat_rooms", "GET", null));
     console.log(content);
     if (Object.keys(content).length !== 0) {
@@ -11,18 +11,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function displayContent(content) {
-    var tableBody   = document.getElementById("tableBody");
-    var row         = document.createElement("tr");
-    var cells       = new Array(3);
+    var tableBody = document.getElementById("tableBody");
+    var row = document.createElement("tr");
+    var cells = new Array(3);
 
     for (var i = 0; i < 3; i++) {
         cells[i] = document.createElement("td");
     }
     var values = {
-        0   : content.name_lieferant,
-        1   : content.art_nr,
-        2   : content.beschreibung,
-    }
+        0: content.name_lieferant,
+        1: content.art_nr,
+        2: content.beschreibung,
+    };
 
     for (i = 0; i < cells.length; i++) {
         cells[i].appendChild(document.createTextNode(values[i]));
@@ -31,8 +31,8 @@ function displayContent(content) {
         row.appendChild(cells[i])
     }
 
-    row.ondblclick = function() {
-        // TODO: dialog to create chat room 
+    row.ondblclick = function () {
+        // TODO: dialog to create chat room
     };
     tableBody.appendChild(row);
 }
@@ -41,8 +41,7 @@ function displayContent(content) {
 function httpRequest(path, method, params) {
     var xmlHttp = new XMLHttpRequest();
     var synchronous;
-    switch (method)
-    {
+    switch (method) {
         case "GET"  :
             (synchronous = false);
             break;
