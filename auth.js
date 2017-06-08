@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const router = new express.Router();
 const db = require("./db.js");
+var hash = require('sha256');
 require('dotenv').config();
 
 // cookie settings
@@ -26,7 +27,7 @@ router.use("/auth/login", function (req, res) {
         // Check if a password and username was given
         if (req.body.password && req.body.username) {
             var username = req.body.username;
-            var password = req.body.password;
+            var password = hash.x2(req.body.password);
             var queryString = "SELECT * FROM users WHERE user_name = " + db.escape(username);
 
             db.query(queryString, function (error, results) {
@@ -39,7 +40,7 @@ router.use("/auth/login", function (req, res) {
                 } else {
                     if (results[0].password === password) {
                         req.session.authenticated = true;
-                        res.json({authenticated: true})
+                        res.redirect("/chat_page");
                     } else {
                         res.json({authenticated: false});
                     }

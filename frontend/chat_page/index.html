@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bestellseite</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body>
+<div id="entryButtonArea">
+    <button onclick="toggle_visibility('popupBoxOnePosition');" id="newEntryButton">+</button>
+</div>
+<div id="main" onscroll="loadElements()">
+    <table id="tableBody">
+        <tr>
+            <th onclick="sortAfter('id');"> ID</th>
+            <th onclick="sortAfter('room_name')"> Room Name</th>
+            <th onclick="sortAfter('participants')">Participants</th>
+        </tr>
+    </table>
+</div>
+<div id="popupBoxOnePosition">
+    <div class="popupBoxContent">
+        <h3>Neuen Eintrag Erfassen</h3>
+        <form action="http://192.168.201.156:8080/main/newEntry" method="post">
+            <div id="newEntryArea">
+                Lieferant
+                <select id="lieferantenDropDown" name="lieferant" placeholder="Lierferant"></select>
+                <br>
+                <input id="artikelNrTextField" name="artikelNr" placeholder="Artikel Nummer" type="text" required="">
+                <br>
+                <input id="bezeichnungTextField" name="bezeichnung" placeholder="Bezeichnung" type="text" required="">
+                <br>
+                <input id="mengeTextField" name="menge" placeholder="Menge" type="text" required="">
+                <br>
+                Kommission
+                <select id="kommissionDropDown" name="kommission" placeholder="Kommission"></select>
+                <br>
+                <input id="infoWareHierTextField" name="infoWareHier" placeholder="Info Ware Hier" type="text"
+                       required="">
+                <br>
+                <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

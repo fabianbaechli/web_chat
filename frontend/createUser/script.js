@@ -19,15 +19,19 @@ function checkName() {
         fields.fullName = true;
     }
     function checkEmail() {
+        // TODO: Email Regex
         console.log("email");
     }
     function checkUsername() {
+        // TODO: Name Validation
         console.log("username");
     }
     function checkPassword() {
+        // TODO: Password Validation
         console.log("password");
     }
     function checkRetypePassword() {
+        // TODO: Retyped Password must match first
         console.log("retype password");
     }
 }

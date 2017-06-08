@@ -47,5 +47,12 @@ app.post("/createUser", function (req, res) {
     console.log(queryString);
 });
 
+app.get('/chat_page/chat_rooms', function(req, res) {
+    if (req.session.authenticated === true) {
+        res.json({authenticated: true});
+    } else {
+        res.json({});
+    }
+});
 app.listen(8080);
 console.log(new Date + " Server listening on port 8080");
