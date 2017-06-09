@@ -1,12 +1,12 @@
 // Dependencies
-var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var app = express();
-var hash = require('sha256');
-var auth = require("./auth.js");
-var db = require("./db.js");
-var inputValidator = require("./input_validation.js");
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const app = express();
+const hash = require('sha256');
+const auth = require("./auth.js");
+const db = require("./db.js");
+const inputValidator = require("./input_validation.js");
 require('dotenv').config();
 
 app.use(bodyParser.json());
@@ -20,7 +20,7 @@ app.use(express.static('frontend'));
 // Handles authentication
 app.use(auth.router);
 
-app.post("/createUser", function (req, res) {
+app.post("/createUser", (req, res) => {
     // Input validation
     if ((inputValidator.validateFullName(req.body.fullName)) &&
         (inputValidator.validateUsername(req.body.username)) &&
@@ -31,24 +31,24 @@ app.post("/createUser", function (req, res) {
         console.log("all good with input");
 
         // Prevents sql injections
-        var fullName = db.escape(req.body.fullName);
-        var email = db.escape(req.body.email);
-        var username = db.escape(req.body.username);
-        var profilePicture = db.escape(req.body.image);
-        var password = hash.x2(req.body.password);
+        const fullName = db.escape(req.body.fullName);
+        const email = db.escape(req.body.email);
+        const username = db.escape(req.body.username);
+        const profilePicture = db.escape(req.body.image);
+        let password = hash.x2(req.body.password);
         password = db.escape(password);
 
         // Create user query string
-        var queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
+        let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
             "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
 
         // To check if user is not already existing on database
-        db.query("SELECT * FROM users WHERE user_name = " + username, function (error, results) {
+        db.query("SELECT * FROM users WHERE user_name = " + username, (error, results) => {
             if (error) {
                 console.log(error);
             } else {
                 if (results.length === 0) {
-                    db.query(queryString, function () {
+                    db.query(queryString, () => {
                         console.log("created user");
                         req.session.authenticated = true;
                         res.redirect("/chat_page");
@@ -61,15 +61,13 @@ app.post("/createUser", function (req, res) {
     } else {
         res.json({userCreated: false, message: "bad input"});
     }
-
-    console.log(queryString);
 });
 
-app.get('/chat_page/chat_rooms', function (req, res) {
+app.get('/chat_page/chat_rooms', (req, res) => {
     if (req.session.authenticated === true) {
-        var query = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
+        const query = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
             "INNER JOIN users ON chat_room.admin = users.id";
-        db.query(query, function (error, results) {
+        db.query(query, (error, results) => {
             if (error) {
                 console.log(error);
             } else {

@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const router = new express.Router();
 const db = require("./db.js");
-var hash = require('sha256');
+const hash = require('sha256');
 require('dotenv').config();
 
 // cookie settings
@@ -16,7 +16,7 @@ router.use(session({
 }));
 
 // Check if the user is logged in
-router.use("/auth/login", function (req, res) {
+router.use("/auth/login", (req, res) => {
     console.log("login attempt");
     // Only login if the user is not authenticated
     if (!req.session.authenticated) {
@@ -26,11 +26,11 @@ router.use("/auth/login", function (req, res) {
 
         // Check if a password and username was given
         if (req.body.password && req.body.username) {
-            var username = req.body.username;
-            var password = hash.x2(req.body.password);
-            var queryString = "SELECT * FROM users WHERE user_name = " + db.escape(username);
+            const username = req.body.username;
+            const password = hash.x2(req.body.password);
+            const queryString = "SELECT * FROM users WHERE user_name = " + db.escape(username);
 
-            db.query(queryString, function (error, results) {
+            db.query(queryString, (error, results) => {
                 if (error) {
                     throw error;
                 }
@@ -50,19 +50,19 @@ router.use("/auth/login", function (req, res) {
     }
 });
 
-router.use('/auth/logout', function (req, res) {
+router.use('/auth/logout', (req, res) => {
     req.session.destroy();
     req.session.authenticated = false;
     res.redirect('/');
 });
 
-router.use('/auth/status', function (req, res) {
+router.use('/auth/status', (req, res) => {
     res.json({
         authenticated: req.session.authenticated
     });
 });
 
-module.exports.requiresAuthentication = function(req, res, next) {
+module.exports.requiresAuthentication = (req, res, next) => {
     // Send the error
     function err(res) {
         res.status(401).json({

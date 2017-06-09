@@ -7,36 +7,33 @@
 </head>
 <body>
 <div id="entryButtonArea">
-    <button onclick="toggle_visibility('popupBoxOnePosition');" id="newEntryButton">    + </button>
+    <button onclick="toggle_visibility('createChatRoomPopup');" id="newEntryButton"> +</button>
 </div>
-<div id="main" onscroll="loadElements()">
+<div id="main">
     <table id="tableBody">
         <tr>
             <th onclick="sortAfter('id');"> ID</th>
             <th onclick="sortAfter('room_name')"> Room Name</th>
-            <th onclick="sortAfter('participants')">Participants</th>
+            <th onclick="sortAfter('room_admin')"> Room Admin</th>
+            <th onclick="sortAfter('participants')">Max Participants</th>
         </tr>
     </table>
 </div>
-<div id="popupBoxOnePosition">
+<div id="createChatRoomPopup">
     <div class="popupBoxContent">
-        <h3>Neuen Eintrag Erfassen</h3>
-        <form action="http://192.168.201.156:8080/main/newEntry" method="post">
+        <h3>Create a new Chat Room!</h3>
+        <form action="localhost:8080/create_chat_room" method="post">
             <div id="newEntryArea">
-                Lieferant
-                <select id="lieferantenDropDown" name="lieferant" placeholder="Lierferant"></select>
+                <input id="roomNameTextField" name="roomName" placeholder="Room Name" t
+                       ype="text" required="">
                 <br>
-                <input id="artikelNrTextField" name="artikelNr" placeholder="Artikel Nummer" type="text" required="">
+                <input id="maxParticipantsTextField" name="maxParticipants" placeholder="Max Participants"
+                       type="number" required="">
                 <br>
-                <input id="bezeichnungTextField" name="bezeichnung" placeholder="Bezeichnung" type="text" required="">
-                <br>
-                <input id="mengeTextField" name="menge" placeholder="Menge" type="text" required="">
-                <br>
-                Kommission
-                <select id="kommissionDropDown" name="kommission" placeholder="Kommission"></select>
-                <br>
-                <input id="infoWareHierTextField" name="infoWareHier" placeholder="Info Ware Hier" type="text"
-                       required="">
+                <input id="passwordTextField" name="password" placeholder="Room Password"
+                       type="password" required="">
+                <input id="retypePasswordTextField" name="retypePassword" placeholder="Retype Password"
+                       type="password" required="">
                 <br>
                 <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
             </div>
