@@ -4,10 +4,8 @@ document.addEventListener('DOMContentLoaded', function () {
     content = JSON.parse(httpRequest("/chat_page/chat_rooms", "GET", null));
     console.log(content);
     if (Object.keys(content).length !== 0) {
-        console.log("authenticated mydude");
-        content = {id: 312, room_name: "we dem boyes", participants: "boye 1, bleep bloop, S U C C, ^^23i0ä"};
-        for (var i = 0; i < 2; i++) {
-            displayContent(content);
+        for (var i = 0; i < Object.keys(content).length; i++) {
+            displayContent(content[i]);
         }
     } else {
         console.log("not authenticated hombre");
@@ -25,7 +23,7 @@ function displayContent(content) {
     var values = {
         0: content.id,
         1: content.room_name,
-        2: content.participants
+        2: content.max_participants
     };
 
     for (i = 0; i < cells.length; i++) {

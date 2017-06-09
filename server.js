@@ -67,7 +67,7 @@ app.post("/createUser", function (req, res) {
 
 app.get('/chat_page/chat_rooms', function (req, res) {
     if (req.session.authenticated === true) {
-        var query = "SELECT chat_room.id, max_participants, chat_room.password, users.user_name AS admin from chat_room" +
+        var query = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
             "INNER JOIN users ON chat_room.admin = users.id";
         db.query(query, function (error, results) {
             if (error) {
