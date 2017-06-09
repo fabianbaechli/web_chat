@@ -6,19 +6,21 @@
     <script type="text/javascript" src="script.js"></script>
 </head>
 <body>
-<form onsubmit="return checkFormAndSubmit()" method="post">
+<form method="post" onsubmit="return checkForm()">
     <div id="createUserArea">
         <p id="welcomeSentence">Create your User Account</p>
         <input id="fullNameTextField" name="fullName" placeholder="Full Name" type="text" required=""
-               onfocusout="checkName()">
+               onkeyup="checkName()">
         <input id="emailTextField" name="email" placeholder="Email" type="email" required=""
-               onfocusout="checkEmail()">
+               onkeyup="checkEmail()">
         <input id="usernameTextField" name="username" placeholder="Username" type="text" required=""
-               onfocusout="checkUsername()">
+               onkeyup="checkUsername()">
+        <input id="imagePathTextField" name="image" placeholder="Profile Picture" type="text" required=""
+               onkeyup="checkURL()">
         <input id="passwordTextField" name="password" placeholder="Password" type="password" required=""
-               onfocusout="checkPassword()">
+               onkeyup="checkPassword()">
         <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"
-               required="" onfocusout="checkRetypePassword()">
+               required="" onkeyup="checkRetypePassword()">
         <button type="submit" class="button"><span>Create User!</span></button>
     </div>
 </form>
