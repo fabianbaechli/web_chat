@@ -24,7 +24,7 @@ app.post("/createUser", function (req, res) {
     if ((inputValidator.validateFullName(req.body.fullName)) &&
         (inputValidator.validateUsername(req.body.username)) &&
         (inputValidator.validatePassword(req.body.password)) &&
-        (inputValidator.validateRetypedPassword("hello", "hello")) &&
+        (inputValidator.validateRetypedPassword(req.body.password, req.body.retypePassword)) &&
         (inputValidator.validateEmail(req.body.email)) &&
         (inputValidator.validateURL(req.body.image))) {
         console.log("all good with input");
@@ -45,7 +45,8 @@ app.post("/createUser", function (req, res) {
                 if (results.length === 0) {
                     db.query(queryString, function () {
                         console.log("created user");
-                        res.json({userCreated: true});
+                        req.session.authenticated = true;
+                        res.redirect("/chat_page");
                     })
                 } else {
                     res.json({userCreated: false, message: "username already taken"});
