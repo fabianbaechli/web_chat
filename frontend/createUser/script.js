@@ -46,9 +46,9 @@ function checkPassword() {
 function checkRetypePassword() {
     var element = document.getElementById("passwordRetypeTextField");
     var compareElement = document.getElementById("passwordTextField");
-    var comaparision = element.value === compareElement.value;
-    
-    if (comaparision && fields.password === true) {
+    var comparision = element.value === compareElement.value;
+
+    if (comparision && fields.password === true) {
         document.getElementById("passwordRetypeTextField").style.borderBottomColor = "#1abc9c";
         fields.retypePassword = true;
     } else {

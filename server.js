@@ -6,6 +6,7 @@ var app = express();
 var hash = require('sha256');
 var auth = require("./auth.js");
 var db = require("./db.js");
+var inputValidator = require("./input_validation.js");
 require('dotenv').config();
 
 app.use(bodyParser.json());
@@ -20,29 +21,41 @@ app.use(express.static('frontend'));
 app.use(auth.router);
 
 app.post("/createUser", function (req, res) {
-    var fullName = db.escape(req.body.fullName);
-    var email = db.escape(req.body.email);
-    var username = db.escape(req.body.username);
-    var password = hash.x2(req.body.password);
-    password = db.escape(password);
+    if ((inputValidator.validateFullName(req.body.fullName)) &&
+        (inputValidator.validateUsername(req.body.username)) &&
+        (inputValidator.validatePassword(req.body.password)) &&
+        (inputValidator.validateRetypedPassword("hello", "hello")) &&
+        (inputValidator.validateEmail(req.body.email)) &&
+        (inputValidator.validateURL(req.body.image))) {
+        console.log("all good with input");
 
-    var queryString = "INSERT INTO users (full_name, user_name, password, email) VALUES " +
-        "(" + fullName + "," + username + "," + password + "," + email + ")";
+        var fullName = db.escape(req.body.fullName);
+        var email = db.escape(req.body.email);
+        var username = db.escape(req.body.username);
+        var password = hash.x2(req.body.password);
+        password = db.escape(password);
 
-    db.query("SELECT * FROM users WHERE user_name = " + username, function (error, results) {
-        if (error) {
-            console.log(error);
-        } else {
-            if (results.length === 0) {
-                db.query(queryString, function () {
-                    console.log("created user");
-                    res.json({userCreated: true});
-                })
+        var queryString = "INSERT INTO users (full_name, user_name, password, email) VALUES " +
+            "(" + fullName + "," + username + "," + password + "," + email + ")";
+
+        db.query("SELECT * FROM users WHERE user_name = " + username, function (error, results) {
+            if (error) {
+                console.log(error);
             } else {
-                res.json({userCreated: false, message: "username already taken"});
+                if (results.length === 0) {
+                    db.query(queryString, function () {
+                        console.log("created user");
+                        res.json({userCreated: true});
+                    })
+                } else {
+                    res.json({userCreated: false, message: "username already taken"});
+                }
             }
-        }
-    });
+        });
+    } else {
+        res.json({userCreated: false, message: "bad input"});
+    }
+
     console.log(queryString);
 });
 
