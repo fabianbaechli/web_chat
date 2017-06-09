@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="entryButtonArea">
-    <button onclick="toggle_visibility('createChatRoomPopup');" id="newEntryButton"> +</button>
+    <button onclick="toggle_visibility('popupWrapper');" id="newEntryButton"> +</button>
 </div>
 <div id="main">
     <table id="tableBody">
@@ -19,8 +19,8 @@
         </tr>
     </table>
 </div>
-<div id="createChatRoomPopup">
-    <div class="popupBoxContent">
+<div id="popupWrapper">
+    <div id="popupBoxContent">
         <h3>Create a new Chat Room!</h3>
         <form action="localhost:8080/create_chat_room" method="post">
             <div id="newEntryArea">
