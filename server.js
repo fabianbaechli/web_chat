@@ -21,6 +21,7 @@ app.use(express.static('frontend'));
 app.use(auth.router);
 
 app.post("/createUser", function (req, res) {
+    // Input validation
     if ((inputValidator.validateFullName(req.body.fullName)) &&
         (inputValidator.validateUsername(req.body.username)) &&
         (inputValidator.validatePassword(req.body.password)) &&
@@ -29,15 +30,19 @@ app.post("/createUser", function (req, res) {
         (inputValidator.validateURL(req.body.image))) {
         console.log("all good with input");
 
+        // Prevents sql injections
         var fullName = db.escape(req.body.fullName);
         var email = db.escape(req.body.email);
         var username = db.escape(req.body.username);
+        var profilePicture = db.escape(req.body.image);
         var password = hash.x2(req.body.password);
         password = db.escape(password);
 
-        var queryString = "INSERT INTO users (full_name, user_name, password, email) VALUES " +
-            "(" + fullName + "," + username + "," + password + "," + email + ")";
+        // Create user query string
+        var queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
+            "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
 
+        // To check if user is not already existing on database
         db.query("SELECT * FROM users WHERE user_name = " + username, function (error, results) {
             if (error) {
                 console.log(error);
@@ -60,9 +65,17 @@ app.post("/createUser", function (req, res) {
     console.log(queryString);
 });
 
-app.get('/chat_page/chat_rooms', function(req, res) {
+app.get('/chat_page/chat_rooms', function (req, res) {
     if (req.session.authenticated === true) {
-        res.json({authenticated: true});
+        var query = "SELECT chat_room.id, max_participants, chat_room.password, users.user_name AS admin from chat_room" +
+            "INNER JOIN users ON chat_room.admin = users.id";
+        db.query(query, function (error, results) {
+            if (error) {
+                console.log(error);
+            } else {
+                res.send(results);
+            }
+        });
     } else {
         res.json({});
     }

@@ -5,9 +5,9 @@ CREATE TABLE `users` (
   `email` mediumtext NOT NULL,
   `password` mediumtext NOT NULL,
   `image_path` mediumtext,
-  `online` tinyint(1) NOT NULL,
+  `online` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `chat_room` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
