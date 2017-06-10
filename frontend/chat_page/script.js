@@ -1,3 +1,5 @@
+const fields = {roomName: false, maxParticipants: false, roomPassword: false, retypePassword: false};
+
 // On document load
 let content;
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +14,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function validateRoomName() {
+    const regex = /^.{2,20}$/;
+    const element = document.getElementById("roomNameTextField");
+
+    if (regex.test(element.value)) {
+        fields.roomName = true;
+        colorize(element, true)
+    } else {
+        fields.roomName = false;
+        colorize(element, false)
+    }
+}
+
+function validateMaxParticipants() {
+    if (document.getElementById("maxParticipantsNumField").value < 100) {
+        fields.maxParticipants = true;
+        return true
+    } else {
+        fields.maxParticipants = false;
+        return false
+    }
+}
+
+function validatePassword() {
+    const regex = /^.{6,15}$/;
+    const element = document.getElementById("passwordTextField");
+
+    if (regex.test(element.value)) {
+        fields.roomPassword = true;
+        colorize(element, true)
+    } else {
+        fields.roomPassword = false;
+        colorize(element, false)
+    }
+}
+
+function validateRetypedPassword() {
+    const element = document.getElementById("passwordRetypeTextField");
+    const compareElement = document.getElementById("passwordTextField");
+    const comparision = element.value === compareElement.value;
+
+    if (comparision && fields.password === true) {
+        colorize(compareElement, true);
+        fields.retypePassword = true;
+    } else {
+        colorize(compareElement, false);
+        fields.retypePassword = false;
+    }
+}
 function toggle_visibility(id) {
     const e = document.getElementById(id);
     if (e.style.display === 'block') {
@@ -49,7 +100,7 @@ function displayContent(content) {
     };
     tableBody.appendChild(row);
 }
-
+// TODO: sort after function
 // Forms a HTTP request
 function httpRequest(path, method, params) {
     const xmlHttp = new XMLHttpRequest();
@@ -59,4 +110,12 @@ function httpRequest(path, method, params) {
         xmlHttp.open(method, path, false);
     xmlHttp.send(null);
     return xmlHttp.responseText;
+}
+
+function colorize(element, valid) {
+    if (valid) {
+        element.style.borderBottomColor = "#1abc9c";
+    } else {
+        element.style.borderBottomColor = "red";
+    }
 }
