@@ -14,6 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+function checkForm() {
+    for (let key in fields) {
+        if (fields[key] === false) {
+            window.alert(key + " not properly set");
+            return false;
+        }
+    }
+}
+
 function validateRoomName() {
     const regex = /^.{2,20}$/;
     const element = document.getElementById("roomNameTextField");

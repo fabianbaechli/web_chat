@@ -4,6 +4,9 @@ body {
     height: 100%;
 }
 
+.button {
+    outline: none;
+}
 #createUserArea {
     background-color: white;
     position: absolute;

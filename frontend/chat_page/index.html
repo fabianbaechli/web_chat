@@ -22,18 +22,19 @@
 <div id="popupWrapper">
     <div id="popupBoxContent">
         <h3>Create a new Chat Room!</h3>
-        <form action="localhost:8080/create_chat_room" method="post">
+        <form action="localhost:8080/create_chat_room" onsubmit="return checkForm()" method="post">
             <div id="newEntryArea">
-                <input id="roomNameTextField" name="roomName" placeholder="Room Name" t
-                       ype="text" required="">
+                <input id="roomNameTextField" name="roomName" placeholder="Room Name" type="text"
+                       onkeydown="validateRoomName()" required="">
                 <br>
-                <input id="maxParticipantsNumField" name="maxParticipants" placeholder="Max Participants"
-                       type="number" required="">
+                <input id="maxParticipantsNumField" name="maxParticipants" placeholder="Max Participants" type="number"
+                       onkeydown="validateMaxParticipants()" required="">
                 <br>
-                <input id="passwordTextField" name="password" placeholder="Room Password"
-                       type="password" required="">
-                <input id="retypePasswordTextField" name="retypePassword" placeholder="Retype Password"
-                       type="password" required="">
+                <input id="passwordTextField" name="password" placeholder="Room Password" type="password"
+                       onkeydown="validatePassword()" required="">
+                <br>
+                <input id="retypePasswordTextField" name="retypePassword" placeholder="Retype Password" type="password"
+                       onkeydown="validateRetypedPassword()" required="">
                 <br>
                 <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
             </div>
