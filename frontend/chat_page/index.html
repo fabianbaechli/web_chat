@@ -25,16 +25,16 @@
         <form action="localhost:8080/create_chat_room" onsubmit="return checkForm()" method="post">
             <div id="newEntryArea">
                 <input id="roomNameTextField" name="roomName" placeholder="Room Name" type="text"
-                       onkeydown="validateRoomName()" required="">
+                       onkeyup="validateRoomName()" required="">
                 <br>
                 <input id="maxParticipantsNumField" name="maxParticipants" placeholder="Max Participants" type="number"
-                       onkeydown="validateMaxParticipants()" required="">
+                       onkeyup="validateMaxParticipants()" required="">
                 <br>
                 <input id="passwordTextField" name="password" placeholder="Room Password" type="password"
-                       onkeydown="validatePassword()" required="">
+                       onkeyup="validatePassword()" required="">
                 <br>
-                <input id="retypePasswordTextField" name="retypePassword" placeholder="Retype Password" type="password"
-                       onkeydown="validateRetypedPassword()" required="">
+                <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"
+                       onkeyup="validateRetypedPassword()" required="">
                 <br>
                 <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
             </div>

@@ -20,28 +20,63 @@ function checkForm() {
 function checkName() {
     const regex = /^[a-zA-Z ]{2,30}$/;
     const element = document.getElementById("fullNameTextField");
-    colorize(regex, element, "fullName");
+
+    if (regex.test(element.value)) {
+        fields.fullName = true;
+        colorize(element, true)
+    } else {
+        fields.fullName = false;
+        colorize(element, false)
+    }
 }
 function checkEmail() {
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const element = document.getElementById("emailTextField");
-    colorize(regex, element, "email");
+
+    if (regex.test(element.value)) {
+        fields.email = true;
+        colorize(element, true)
+    } else {
+        fields.email = false;
+        colorize(element, false)
+    }
 }
 function checkUsername() {
     const regex = /^.{2,20}$/;
     const element = document.getElementById("usernameTextField");
-    colorize(regex, element, "username");
+
+    if (regex.test(element.value)) {
+        fields.username = true;
+        colorize(element, true)
+    } else {
+        fields.username = false;
+        colorize(element, false)
+    }
 }
 
 function checkURL() {
     const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&/=]*)/;
     const element = document.getElementById("imagePathTextField");
-    colorize(regex, element, "url");
+
+    if (regex.test(element.value)) {
+        fields.url = true;
+        colorize(element, true)
+    } else {
+        fields.url = false;
+        colorize(element, false)
+    }
 }
 function checkPassword() {
     const regex = /^.{6,15}$/;
     const element = document.getElementById("passwordTextField");
-    colorize(regex, element, "password");
+
+    if (regex.test(element.value)) {
+        fields.passowrd = true;
+        colorize(element, true)
+    } else {
+        fields.password = false;
+        colorize(element, false)
+    }
 }
 function checkRetypePassword() {
     const element = document.getElementById("passwordRetypeTextField");
@@ -49,19 +84,18 @@ function checkRetypePassword() {
     const comparision = element.value === compareElement.value;
 
     if (comparision && fields.password === true) {
-        document.getElementById("passwordRetypeTextField").style.borderBottomColor = "#1abc9c";
+        colorize(element, true);
         fields.retypePassword = true;
     } else {
-        document.getElementById("passwordRetypeTextField").style.borderBottomColor = "red";
+        colorize(element, false);
         fields.retypePassword = false;
     }
 }
-function colorize(regex, htmlElement, elementInFieldsList) {
-    if (!regex.test(htmlElement.value)) {
-        htmlElement.style.borderBottomColor = "red";
-        fields[elementInFieldsList] = false;
+
+function colorize(element, valid) {
+    if (valid) {
+        element.style.borderBottomColor = "#1abc9c";
     } else {
-        htmlElement.style.borderBottomColor = "#1abc9c";
-        fields[elementInFieldsList] = true;
+        element.style.borderBottomColor = "red";
     }
 }

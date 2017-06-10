@@ -48,12 +48,6 @@ body {
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-input::-webkit-input-placeholder {
-    font-family: 'roboto-light', sans-serif;
-    -webkit-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-}
-
 a {
     margin-left: 40%;
 }
@@ -82,6 +76,13 @@ input:focus, input:valid {
     outline: none;
     border-bottom: solid 2px #1abc9c;
     background-position: 0 0;
+}
+
+input::-webkit-input-placeholder {
+    color: #1abc9c;
+    font-family: 'roboto-light', sans-serif;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {

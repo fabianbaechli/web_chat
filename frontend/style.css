@@ -91,13 +91,13 @@ input {
 }
 
 input:focus, input:valid {
+    color: #1abc9c;
     box-shadow: none;
     outline: none;
     background-position: 0 0;
 }
 
 input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
-    color: #1abc9c;
     font-size: 11px;
     -webkit-transform: translateY(-20px);
     transform: translateY(-20px);

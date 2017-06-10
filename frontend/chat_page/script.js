@@ -37,12 +37,13 @@ function validateRoomName() {
 }
 
 function validateMaxParticipants() {
-    if (document.getElementById("maxParticipantsNumField").value < 100) {
+    const element = document.getElementById("maxParticipantsNumField");
+    if (element.value < 100) {
         fields.maxParticipants = true;
-        return true
+        colorize(element, true)
     } else {
         fields.maxParticipants = false;
-        return false
+        colorize(element, false)
     }
 }
 
@@ -65,10 +66,10 @@ function validateRetypedPassword() {
     const comparision = element.value === compareElement.value;
 
     if (comparision && fields.password === true) {
-        colorize(compareElement, true);
+        colorize(element, true);
         fields.retypePassword = true;
     } else {
-        colorize(compareElement, false);
+        colorize(element, false);
         fields.retypePassword = false;
     }
 }
