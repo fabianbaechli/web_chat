@@ -54,6 +54,7 @@ body {
 }
 
 input::-webkit-input-placeholder {
+    color: #1abc9c;
     font-family: 'roboto-light', sans-serif;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
@@ -72,6 +73,7 @@ a:-webkit-any-link {
     font-family: 'roboto-light', sans-serif;
     text-decoration: none;
     text-align: center;
+    outline: none;
 }
 
 input {
@@ -91,9 +93,9 @@ input {
 }
 
 input:focus, input:valid {
-    color: #1abc9c;
     box-shadow: none;
     outline: none;
+    border-bottom: solid 2px #1abc9c;
     background-position: 0 0;
 }
 
