@@ -10,17 +10,17 @@
     <div id="createUserArea">
         <p id="welcomeSentence">Create your User Account</p>
         <input id="fullNameTextField" name="fullName" placeholder="Full Name" type="text" required=""
-               onkeyup="checkName()">
+               onchange="checkName()">
         <input id="emailTextField" name="email" placeholder="Email" type="email" required=""
-               onkeyup="checkEmail()">
+               onchange="checkEmail()">
         <input id="usernameTextField" name="username" placeholder="Username" type="text" required=""
-               onkeyup="checkUsername()">
+               onchange="checkUsername()">
         <input id="imagePathTextField" name="image" placeholder="Profile Picture" type="text" required=""
-               onkeyup="checkURL()">
+               onchange="checkURL()">
         <input id="passwordTextField" name="password" placeholder="Password" type="password" required=""
-               onkeyup="checkPassword()">
+               onchange="checkPassword()">
         <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"
-               required="" onkeyup="checkRetypePassword()">
+               required="" onchange="checkRetypePassword()">
         <button type="submit" class="button"><span>Create User!</span></button>
     </div>
 </form>

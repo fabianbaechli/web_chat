@@ -23,56 +23,6 @@ function checkForm() {
     }
 }
 
-function validateRoomName() {
-    const regex = /^.{2,20}$/;
-    const element = document.getElementById("roomNameTextField");
-
-    if (regex.test(element.value)) {
-        fields.roomName = true;
-        colorize(element, true)
-    } else {
-        fields.roomName = false;
-        colorize(element, false)
-    }
-}
-
-function validateMaxParticipants() {
-    const element = document.getElementById("maxParticipantsNumField");
-    if (element.value < 100) {
-        fields.maxParticipants = true;
-        colorize(element, true)
-    } else {
-        fields.maxParticipants = false;
-        colorize(element, false)
-    }
-}
-
-function validatePassword() {
-    const regex = /^.{6,15}$/;
-    const element = document.getElementById("passwordTextField");
-
-    if (regex.test(element.value)) {
-        fields.roomPassword = true;
-        colorize(element, true)
-    } else {
-        fields.roomPassword = false;
-        colorize(element, false)
-    }
-}
-
-function validateRetypedPassword() {
-    const element = document.getElementById("passwordRetypeTextField");
-    const compareElement = document.getElementById("passwordTextField");
-    const comparision = element.value === compareElement.value;
-
-    if (comparision && fields.password === true) {
-        colorize(element, true);
-        fields.retypePassword = true;
-    } else {
-        colorize(element, false);
-        fields.retypePassword = false;
-    }
-}
 function toggle_visibility(id) {
     const e = document.getElementById(id);
     if (e.style.display === 'block') {
@@ -120,6 +70,57 @@ function httpRequest(path, method, params) {
         xmlHttp.open(method, path, false);
     xmlHttp.send(null);
     return xmlHttp.responseText;
+}
+
+function validateRoomName() {
+    const regex = /^.{2,20}$/;
+    const element = document.getElementById("roomNameTextField");
+
+    if (regex.test(element.value)) {
+        fields.roomName = true;
+        colorize(element, true)
+    } else {
+        fields.roomName = false;
+        colorize(element, false)
+    }
+}
+
+function validateMaxParticipants() {
+    const element = document.getElementById("maxParticipantsNumField");
+    if (element.value < 5000) {
+        fields.maxParticipants = true;
+        colorize(element, true)
+    } else {
+        fields.maxParticipants = false;
+        colorize(element, false)
+    }
+}
+
+function validatePassword() {
+    const regex = /^.{6,15}$/;
+    const element = document.getElementById("passwordTextField");
+
+    if (regex.test(element.value)) {
+        fields.roomPassword = true;
+        colorize(element, true)
+    } else {
+        fields.roomPassword = false;
+        colorize(element, false)
+    }
+}
+
+function validateRetypedPassword() {
+    const element = document.getElementById("passwordRetypeTextField");
+    const compareElement = document.getElementById("passwordTextField");
+    const comparision = element.value === compareElement.value;
+
+    if (comparision && fields.roomPassword === true) {
+        colorize(element, true);
+        fields.retypePassword = true;
+    } else {
+        colorize(element, false);
+        fields.retypePassword = false;
+    }
 }
 
 function colorize(element, valid) {
