@@ -91,7 +91,7 @@ app.post("/chat_page/create_chat_room", (req, res) => {
                     console.log(error);
                     res.json({created_chat_room: false})
                 } else {
-                    res.json({created_chat_room: true})
+                    res.redirect("/chat_page/");
                 }
             });
         } else {
