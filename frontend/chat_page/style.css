@@ -92,7 +92,7 @@ td, th {
 
 #popupBoxContent {
     width: 40%;
-    height: 40%;
+    height: 44%;
     margin: 50px auto;
     background-color: #FFF;
     padding: 15px;
@@ -120,6 +120,7 @@ input {
     margin-left: 35%;
     margin-top: 5%;
     width: 30%;
+    height: 20px;
     display: block;
     border: none;
     padding: 10px 0;
@@ -145,6 +146,8 @@ input:focus, input:valid {
 
 input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
     font-size: 11px;
-    -webkit-transform: translateY(-20px);
-    transform: translateY(-20px);
+    color: #1abc9c;
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
+    visibility: visible !important;
 }

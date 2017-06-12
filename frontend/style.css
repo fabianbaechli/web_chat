@@ -83,10 +83,8 @@ input {
     display: block;
     border: none;
     padding: 10px 0;
+    height: 20px;
     border-bottom: solid 1px #1abc9c;
-    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #1abc9c 4%);
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #1abc9c 4%);
-    background-position: -500px 0;
     background-size: 100% 100%;
     background-repeat: no-repeat;
     color: #0e6252;
@@ -101,7 +99,7 @@ input:focus, input:valid {
 
 input:focus::-webkit-input-placeholder, input:valid::-webkit-input-placeholder {
     font-size: 11px;
-    -webkit-transform: translateY(-20px);
-    transform: translateY(-20px);
+    -webkit-transform: translateY(-15px);
+    transform: translateY(-15px);
     visibility: visible !important;
 }
