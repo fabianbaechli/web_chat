@@ -69,8 +69,7 @@ app.get("/chat_page/user_info", (req, res) => {
         authenticated: req.session.authenticated})
 });
 
-app.post("/chat_page", (req, res) => {
-    console.log("request");
+app.post("/chat_page/create_chat_room", (req, res) => {
     if ((inputValidator.validateRoomName(req.body.roomName)) &&
         (inputValidator.validateMaxParticipants(req.body.maxParticipants)) &&
         (inputValidator.validatePassword(req.body.password)) &&
@@ -85,12 +84,14 @@ app.post("/chat_page", (req, res) => {
 
             const query = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
                 "(" + maxParticipants + "," + userId + "," + password + "," + roomName+ ")";
+
             console.log(query);
             db.query(query, (error, results) => {
                 if (error) {
                     console.log(error);
+                    res.json({created_chat_room: false})
                 } else {
-                    res.redirect("/chat_page")
+                    res.json({created_chat_room: true})
                 }
             });
         } else {

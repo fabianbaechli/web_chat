@@ -8,8 +8,9 @@ require('dotenv').config();
 // cookie settings
 router.use(session({
     secret: process.env.COOKIE_SECRET,
+    cookieName: 'session',
     cookie: {
-        maxAge: 10000
+        maxAge: 10000000
     },
     resave: true,
     saveUninitialized: true
