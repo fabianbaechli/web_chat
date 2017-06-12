@@ -2,10 +2,18 @@ const fields = {roomName: false, maxParticipants: false, roomPassword: false, re
 
 // On document load
 let content;
+let userInfo;
+
 document.addEventListener('DOMContentLoaded', () => {
+    validateMaxParticipants();
+    validatePassword();
+    validateRetypedPassword();
+    validateRoomName();
+    userInfo = JSON.parse(httpRequest("/chat_page/user_info", "GET", null));
     content = JSON.parse(httpRequest("/chat_page/chat_rooms", "GET", null));
+    console.log(userInfo);
     console.log(content);
-    if (Object.keys(content).length !== 0) {
+    if (userInfo.authenticated) {
         for (let i = 0; i < Object.keys(content).length; i++) {
             displayContent(content[i]);
         }
@@ -41,6 +49,7 @@ function displayContent(content) {
     for (let i = 0; i < 4; i++) {
         cells[i] = document.createElement("td");
     }
+
     const values = {
         0: content.id,
         1: content.room_name,
@@ -55,9 +64,7 @@ function displayContent(content) {
         row.appendChild(cells[i])
     }
     row.style.backgroundColor = "#B0BEC5";
-    row.ondblclick = () => {
-        // TODO: dialog to enter chat room
-    };
+    row.className = "entry";
     tableBody.appendChild(row);
 }
 // TODO: sort after function
@@ -87,7 +94,7 @@ function validateRoomName() {
 
 function validateMaxParticipants() {
     const element = document.getElementById("maxParticipantsNumField");
-    if (element.value < 5000) {
+    if (element.value < 5000 && element.value > 0) {
         fields.maxParticipants = true;
         colorize(element, true)
     } else {

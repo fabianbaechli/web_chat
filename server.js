@@ -62,6 +62,44 @@ app.post("/createUser", (req, res) => {
         res.json({userCreated: false, message: "bad input"});
     }
 });
+app.get("/chat_page/user_info", (req, res) => {
+    res.json({
+        username: req.session.username,
+        user_id: req.session.userId,
+        authenticated: req.session.authenticated})
+});
+
+app.post("/chat_page", (req, res) => {
+    console.log("request");
+    if ((inputValidator.validateRoomName(req.body.roomName)) &&
+        (inputValidator.validateMaxParticipants(req.body.maxParticipants)) &&
+        (inputValidator.validatePassword(req.body.password)) &&
+        (inputValidator.validateRetypedPassword(req.body.password, req.body.retypePassword))) {
+
+        if (req.session.authenticated === true) {
+            const userId = req.session.userId;
+            const roomName = db.escape(req.body.roomName);
+            const maxParticipants = Number(req.body.maxParticipants);
+            let password = hash.x2(req.body.password);
+            password = db.escape(password);
+
+            const query = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
+                "(" + maxParticipants + "," + userId + "," + password + "," + roomName+ ")";
+            console.log(query);
+            db.query(query, (error, results) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.redirect("/chat_page")
+                }
+            });
+        } else {
+            res.json({user_authenticated: false})
+        }
+    } else {
+        res.json({input_valid: false})
+    }
+});
 
 app.get('/chat_page/chat_rooms', (req, res) => {
     if (req.session.authenticated === true) {

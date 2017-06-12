@@ -69,11 +69,9 @@ td {
     font-weight: lighter;
     border-bottom: 1px solid white;
 }
-
-tr:hover {
-    opacity: 0.8;
+.entry:hover {
+    background-color: black;
 }
-
 td, th {
     height: 5%;
     text-align: center;

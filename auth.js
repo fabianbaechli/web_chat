@@ -40,6 +40,8 @@ router.use("/auth/login", (req, res) => {
                 } else {
                     if (results[0].password === password) {
                         req.session.authenticated = true;
+                        req.session.username = username;
+                        req.session.userId = results[0].id;
                         res.redirect("/chat_page");
                     } else {
                         res.json({authenticated: false});

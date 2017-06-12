@@ -71,7 +71,7 @@ function checkPassword() {
     const element = document.getElementById("passwordTextField");
 
     if (regex.test(element.value)) {
-        fields.passowrd = true;
+        fields.password = true;
         colorize(element, true)
     } else {
         fields.password = false;
