@@ -40,7 +40,7 @@ function joinChat(id, password) {
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.onreadystatechange = () => {
         if (http.readyState === 4 && http.status === 200) {
-            console.log("sent login req");
+            console.log(http.responseText);
         }
     };
     http.send(params);

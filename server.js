@@ -71,7 +71,24 @@ app.get("/chat_page/user_info", (req, res) => {
 });
 
 app.post("/chat_page/join_chat_room", (req, res) => {
-   console.log(req.body.id, req.body.password);
+    if (req.session.authenticated === true) {
+        const roomId = db.escape(req.body.id);
+        let password = hash.x2(req.body.password);
+        const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
+        
+        db.query(queryString, (error, results) => {
+           if (error) {
+               console.log(error);
+           } else {
+               console.log(password);
+               if (results[0].password === password) {
+
+               }
+           }
+        });
+    } else {
+        res.json({authenticated: false})
+    }
 });
 
 app.post("/chat_page/create_chat_room", (req, res) => {
