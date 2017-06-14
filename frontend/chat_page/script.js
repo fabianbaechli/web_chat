@@ -31,6 +31,21 @@ function checkForm() {
     }
 }
 
+function joinChat(id, password) {
+    console.log(id, password);
+    const http = new XMLHttpRequest();
+    const params = "id=" + id + "&password=" + password;
+
+    http.open("POST", "/chat_page/join_chat_room", true);
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.onreadystatechange = () => {
+        if (http.readyState === 4 && http.status === 200) {
+            console.log("sent login req");
+        }
+    };
+    http.send(params);
+}
+
 function toggle_visibility(id) {
     const e = document.getElementById(id);
     if (e.style.display === 'block') {
@@ -65,6 +80,16 @@ function displayContent(content) {
     }
     row.style.backgroundColor = "#B0BEC5";
     row.className = "entry";
+
+    row.onclick = () => {
+        toggle_visibility('joinChatPopUp');
+        const submitButton = document.getElementById("joinChatButton");
+        submitButton.onclick = () => {
+            const passwordValue = document.getElementById("passwordField").value;
+            joinChat(row.firstChild.innerText, passwordValue);
+        }
+    };
+
     tableBody.appendChild(row);
 }
 // TODO: sort after function

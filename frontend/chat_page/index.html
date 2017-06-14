@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="entryButtonArea">
-    <button onclick="toggle_visibility('popupWrapper');" id="newEntryButton"> +</button>
+    <button onclick="toggle_visibility('newChat');" id="newEntryButton">+</button>
 </div>
 <div id="main">
     <table id="tableBody">
@@ -19,7 +19,7 @@
         </tr>
     </table>
 </div>
-<div id="popupWrapper">
+<div class="popupWrapper" id="newChat">
     <div id="popupBoxContent">
         <h3>Create a new Chat Room!</h3>
         <form onsubmit="return checkForm()" action="http://localhost:8080/chat_page/create_chat_room"
@@ -38,6 +38,19 @@
                        onchange="validateRetypedPassword()" required="">
                 <br>
                 <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="popupWrapper" id="joinChatPopUp">
+    <div id="join_chat">
+        <h3 id="chatRoomTitle">Join Chat!</h3>
+        <form method="post" action="">
+            <div id="join_chatroom_popup">
+                <input id="passwordField" name="password" placeholder="Room Password" type="password"
+                       onchange="validatePassword()" required="">
+                <br>
+                <button id="joinChatButton" type="submit" class="button"><span>Join!</span></button>
             </div>
         </form>
     </div>

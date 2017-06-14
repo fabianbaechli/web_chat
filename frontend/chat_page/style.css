@@ -78,7 +78,7 @@ td, th {
     padding: 8px;
 }
 
-#popupWrapper {
+.popupWrapper {
     top: 0;
     left: 0;
     position: fixed;
@@ -95,6 +95,31 @@ td, th {
     background-color: #FFF;
     padding: 15px;
     text-align: center;
+}
+#join_chat {
+    width: 40%;
+    height: 18%;
+    margin: 50px auto;
+    background-color: #FFF;
+    padding: 15px;
+    text-align: center;
+}
+
+#joinChatButton {
+    background-color: #E91E63;
+    border: none;
+    color: white;
+    width: 20%;
+    height: 35px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 100%;
+    border-radius: 23px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
 }
 
 #submitButton {

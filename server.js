@@ -66,7 +66,12 @@ app.get("/chat_page/user_info", (req, res) => {
     res.json({
         username: req.session.username,
         user_id: req.session.userId,
-        authenticated: req.session.authenticated})
+        authenticated: req.session.authenticated
+    })
+});
+
+app.post("/chat_page/join_chat_room", (req, res) => {
+   console.log(req.body.id, req.body.password);
 });
 
 app.post("/chat_page/create_chat_room", (req, res) => {
@@ -83,7 +88,7 @@ app.post("/chat_page/create_chat_room", (req, res) => {
             password = db.escape(password);
 
             const query = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
-                "(" + maxParticipants + "," + userId + "," + password + "," + roomName+ ")";
+                "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";
 
             console.log(query);
             db.query(query, (error, results) => {
