@@ -95,7 +95,9 @@ app.get("/chat_page/room", (req, res) => {
             if (results.length === 0) {
                 res.redirect("url/to/page/with/pw/input/field")
             } else {
-                
+                getUsersInChatRoom(roomId, (results) => {
+                    res.send(results);
+                })
             }
         })
     }
@@ -144,6 +146,17 @@ function createChatRoom(maxParticipants, userId, password, roomName, callback) {
         if (error) console.log(error);
         else callback();
     });
+}
+function getUsersInChatRoom(roomId, callback) {
+    const queryString = "SELECT user.`user_name` FROM users_chatrooms AS temp_table " +
+    "INNER JOIN users as user ON temp_table.`user_fk` = user.`id` " +
+    "INNER JOIN chat_room as room ON temp_table.`chat_room_fk` = room.`id` " +
+    "WHERE room.id = " + db.escape(roomId);
+
+    db.query(queryString, (error, results) => {
+        if (error) console.log(error);
+        else callback(results)
+    })
 }
 
 function getChatSession(userId, roomId, callback) {
