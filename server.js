@@ -55,28 +55,6 @@ app.post("/createUser", (req, res) => {
         res.json({userCreated: false, message: "bad input"});
     }
 });
-function searchUser(username, callback) {
-    const queryString = "SELECT * FROM users WHERE user_name = " + username;
-    db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            callback(results);
-        }
-    });
-}
-
-function createUser(fullName, username, password, email, profilePicture, callback) {
-    let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
-        "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
-    db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            callback(results);
-        }
-    });
-}
 
 app.get("/chat_page/user_info", (req, res) => {
     res.json({
@@ -104,28 +82,6 @@ app.post("/chat_page/join_chat_room", (req, res) => {
         res.json({authenticated: false})
     }
 });
-
-function getRoomPassword(roomId, callback) {
-    const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
-    db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback(results[0].password);
-        }
-    });
-}
-function insertChatSession(user_fk, chat_room_fk, callback) {
-    const queryString = "INSERT INTO users_chatrooms (user_fk, chat_room_fk) VALUES " +
-        "(" + user_fk + "," + chat_room_fk + ")";
-    db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback(results);
-        }
-    });
-}
 
 app.post("/chat_page/create_chat_room", (req, res) => {
     if ((inputValidator.validateRoomName(req.body.roomName)) &&
@@ -162,18 +118,69 @@ app.post("/chat_page/create_chat_room", (req, res) => {
 
 app.get('/chat_page/chat_rooms', (req, res) => {
     if (req.session.authenticated === true) {
-        const query = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
-            "INNER JOIN users ON chat_room.admin = users.id";
-        db.query(query, (error, results) => {
-            if (error) {
-                console.log(error);
-            } else {
-                res.send(results);
-            }
-        });
+        getAllChatRooms((results) => res.send(results));
     } else {
         res.json({});
     }
 });
 app.listen(8080);
 console.log(new Date + " Server listening on port 8080");
+
+// DB queries
+function getRoomPassword(roomId, callback) {
+    const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            callback(results[0].password);
+        }
+    });
+}
+function getAllChatRooms(callback) {
+    const queryString = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
+        "INNER JOIN users ON chat_room.admin = users.id";
+
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            callback(results);
+        }
+    });
+}
+
+function insertChatSession(user_fk, chat_room_fk, callback) {
+    const queryString = "INSERT INTO users_chatrooms (user_fk, chat_room_fk) VALUES " +
+        "(" + user_fk + "," + chat_room_fk + ")";
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            callback(results);
+        }
+    });
+}
+
+function searchUser(username, callback) {
+    const queryString = "SELECT * FROM users WHERE user_name = " + username;
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            callback(results);
+        }
+    });
+}
+
+function createUser(fullName, username, password, email, profilePicture, callback) {
+    let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
+        "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            callback(results);
+        }
+    });
+}
