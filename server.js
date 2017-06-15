@@ -38,30 +38,46 @@ app.post("/createUser", (req, res) => {
         let password = hash.x2(req.body.password);
         password = db.escape(password);
 
-        // Create user query string
-        let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
-            "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
-
-        // To check if user is not already existing on database
-        db.query("SELECT * FROM users WHERE user_name = " + username, (error, results) => {
-            if (error) {
-                console.log(error);
+        searchUser(username, (results) => {
+            if (results.length === 0) {
+                createUser(fullName, username, password, email, profilePicture, (results) => {
+                    console.log("created user");
+                    req.session.authenticated = true;
+                    req.session.username = username;
+                    req.session.userId = results.insertId;
+                    res.redirect("/chat_page");
+                });
             } else {
-                if (results.length === 0) {
-                    db.query(queryString, () => {
-                        console.log("created user");
-                        req.session.authenticated = true;
-                        res.redirect("/chat_page");
-                    })
-                } else {
-                    res.json({userCreated: false, message: "username already taken"});
-                }
+                res.json({userCreated: false, message: "username already taken"});
             }
         });
     } else {
         res.json({userCreated: false, message: "bad input"});
     }
 });
+function searchUser(username, callback) {
+    const queryString = "SELECT * FROM users WHERE user_name = " + username;
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            callback(results);
+        }
+    });
+}
+
+function createUser(fullName, username, password, email, profilePicture, callback) {
+    let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
+        "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error)
+        } else {
+            callback(results);
+        }
+    });
+}
+
 app.get("/chat_page/user_info", (req, res) => {
     res.json({
         username: req.session.username,
@@ -74,22 +90,42 @@ app.post("/chat_page/join_chat_room", (req, res) => {
     if (req.session.authenticated === true) {
         const roomId = db.escape(req.body.id);
         let password = hash.x2(req.body.password);
-        const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
-        
-        db.query(queryString, (error, results) => {
-           if (error) {
-               console.log(error);
-           } else {
-               console.log(password);
-               if (results[0].password === password) {
-
-               }
-           }
+        getRoomPassword(roomId,(room_password) => {
+            if (room_password === password) {
+                insertChatSession(req.session.userId, roomId, (results) => {
+                    res.json({sessionId: results.insertId});
+                });
+            } else {
+                res.json({joined_room: false})
+            }
         });
+
     } else {
         res.json({authenticated: false})
     }
 });
+
+function getRoomPassword(roomId, callback) {
+    const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            callback(results[0].password);
+        }
+    });
+}
+function insertChatSession(user_fk, chat_room_fk, callback) {
+    const queryString = "INSERT INTO users_chatrooms (user_fk, chat_room_fk) VALUES " +
+        "(" + user_fk + "," + chat_room_fk + ")";
+    db.query(queryString, (error, results) => {
+        if (error) {
+            console.log(error);
+        } else {
+            callback(results);
+        }
+    });
+}
 
 app.post("/chat_page/create_chat_room", (req, res) => {
     if ((inputValidator.validateRoomName(req.body.roomName)) &&
