@@ -36,7 +36,7 @@ function joinChat(id, password) {
     const http = new XMLHttpRequest();
     const params = "id=" + id + "&password=" + password;
 
-    http.open("POST", "/chat_page/join_chat_room", true);
+    http.open("POST", "/chat_page/create_room_session", true);
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.onreadystatechange = () => {
         if (http.readyState === 4 && http.status === 200) {

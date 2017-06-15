@@ -64,11 +64,11 @@ app.get("/chat_page/user_info", (req, res) => {
     })
 });
 
-app.post("/chat_page/join_chat_room", (req, res) => {
+app.post("/chat_page/create_room_session", (req, res) => {
     if (req.session.authenticated === true) {
         const roomId = db.escape(req.body.id);
         let password = hash.x2(req.body.password);
-        getRoomPassword(roomId,(room_password) => {
+        getRoomPassword(roomId, (room_password) => {
             if (room_password === password) {
                 insertChatSession(req.session.userId, roomId, (results) => {
                     res.json({sessionId: results.insertId});
@@ -80,6 +80,24 @@ app.post("/chat_page/join_chat_room", (req, res) => {
 
     } else {
         res.json({authenticated: false})
+    }
+});
+
+app.get("/chat_page/room", (req, res) => {
+    const roomId = req.query.room_number;
+    const userId = req.session.userId;
+    if (userId === undefined) {
+        res.redirect("/");
+    } else if (roomId === undefined) {
+        res.send("missing room_number parameter in link");
+    } else {
+        getChatSession(userId, roomId, (results) => {
+            if (results.length === 0) {
+                res.redirect("url/to/page/with/pw/input/field")
+            } else {
+                
+            }
+        })
     }
 });
 
@@ -123,35 +141,35 @@ function createChatRoom(maxParticipants, userId, password, roomName, callback) {
         "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";
 
     db.query(queryString, (error) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback();
-        }
+        if (error) console.log(error);
+        else callback();
     });
 }
 
+function getChatSession(userId, roomId, callback) {
+    const queryString = "SELECT * from users_chatrooms WHERE user_fk = " + db.escape(userId) + " AND chat_room_fk = " +
+        db.escape(roomId);
+    db.query(queryString, (error, results) => {
+        if (error) console.log(error);
+        else callback(results);
+    });
+}
 
 function getRoomPassword(roomId, callback) {
     const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
     db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback(results[0].password);
-        }
+        if (error) console.log(error);
+        else callback(results[0].password);
     });
 }
+
 function getAllChatRooms(callback) {
     const queryString = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
         "INNER JOIN users ON chat_room.admin = users.id";
 
     db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback(results);
-        }
+        if (error) console.log(error);
+        else callback(results);
     });
 }
 
@@ -159,22 +177,16 @@ function insertChatSession(user_fk, chat_room_fk, callback) {
     const queryString = "INSERT INTO users_chatrooms (user_fk, chat_room_fk) VALUES " +
         "(" + user_fk + "," + chat_room_fk + ")";
     db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error);
-        } else {
-            callback(results);
-        }
+        if (error) console.log(error);
+        else callback(results);
     });
 }
 
 function searchUser(username, callback) {
     const queryString = "SELECT * FROM users WHERE user_name = " + username;
     db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            callback(results);
-        }
+        if (error) console.log(error)
+        else callback(results);
     });
 }
 
@@ -182,10 +194,7 @@ function createUser(fullName, username, password, email, profilePicture, callbac
     let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
         "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
     db.query(queryString, (error, results) => {
-        if (error) {
-            console.log(error)
-        } else {
-            callback(results);
-        }
+        if (error) console.log(error)
+        else callback(results);
     });
 }
