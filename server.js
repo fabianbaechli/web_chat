@@ -96,17 +96,8 @@ app.post("/chat_page/create_chat_room", (req, res) => {
             let password = hash.x2(req.body.password);
             password = db.escape(password);
 
-            const query = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
-                "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";
-
-            console.log(query);
-            db.query(query, (error, results) => {
-                if (error) {
-                    console.log(error);
-                    res.json({created_chat_room: false})
-                } else {
-                    res.redirect("/chat_page/");
-                }
+            createChatRoom(maxParticipants, userId, password, roomName, () => {
+                res.redirect("/chat_page/");
             });
         } else {
             res.json({user_authenticated: false})
@@ -127,6 +118,20 @@ app.listen(8080);
 console.log(new Date + " Server listening on port 8080");
 
 // DB queries
+function createChatRoom(maxParticipants, userId, password, roomName, callback) {
+    const queryString = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
+        "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";
+
+    db.query(queryString, (error) => {
+        if (error) {
+            console.log(error);
+        } else {
+            callback();
+        }
+    });
+}
+
+
 function getRoomPassword(roomId, callback) {
     const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
     db.query(queryString, (error, results) => {
