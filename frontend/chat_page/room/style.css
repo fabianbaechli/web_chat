@@ -1,0 +1,23 @@
+body {
+    background-color: #0f3ea3;
+    height: 100%;
+    width: 100%;
+    font-family: 'roboto', sans-serif;
+}
+.button {
+    outline: none;
+}
+#chat_background {
+    background-color: white;
+    position: absolute;
+    top: 8%;
+    left: 15%;
+    right: 15%;
+    width: 70%;
+    height: 84%;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.50), 0 15px 12px rgba(0, 0, 0, 0.22);
+    display: flex;
+    overflow-y: scroll;
+    align-items: flex-start;
+    justify-content: center;
+}
