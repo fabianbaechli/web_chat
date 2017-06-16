@@ -7,12 +7,42 @@ const hash = require('sha256');
 const auth = require("./auth.js");
 const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
+const WebSocketServer = require('websocket').server;
 require('dotenv').config();
+let count = 0;
+let clients = {};
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
+websocket = new WebSocketServer({
+    httpServer: app
+});
+
+websocket.on('request', function (req) {
+    let connection = req.accept('echo-protocol', req.origin);
+    let id = count += 1;
+    clients[id] = connection;
+
+    connection.on('message', function (message) {
+        console.log(message);
+        const msgString = message.utf8Data;
+
+        // Loop through all clients
+        for (let i in clients) {
+            // Send a message to the client with the message
+            clients[i].sendUTF(msgString);
+        }
+    });
+
+    connection.on('close', function (reasonCode, description) {
+        delete clients[id];
+        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
+    });
+    console.log((new Date()) + ' Connection accepted [' + id + ']');
+});
 
 // All files in the frontend folder are available without a cookie
 app.use(express.static('frontend'));
@@ -72,7 +102,6 @@ app.post("/chat_page/create_room_session", (req, res) => {
 
         getChatSession(userId, roomId, (results) => {
             if (results.length !== 1) {
-                console.log("session already existing");
                 getRoomPassword(roomId, (room_password) => {
                     if (room_password === password) {
                         createChatSession(req.session.userId, roomId, (results) => {
@@ -101,12 +130,12 @@ app.get("/chat_page/chat_content", (req, res) => {
         res.send("missing room_number parameter in link");
     } else {
         getChatSession(userId, roomId, (results) => {
-            console.log(results);
             if (results.length <= 0) {
                 res.json({joined_room: false})
             } else {
+                // the user has a chat session on the server
                 getUsersInChatRoom(roomId, (results) => {
-                    console.log("user joined room")
+                    console.log("user: " + userId + " joined room " + roomId);
                     res.json({joined_room: true, results});
                 })
             }
@@ -175,7 +204,6 @@ function getUsersInChatRoom(roomId, callback) {
 function getChatSession(userId, roomId, callback) {
     const queryString = "SELECT * from users_chatrooms WHERE user_fk = " + db.escape(userId) + " AND chat_room_fk = " +
         roomId;
-    console.log(queryString);
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
         else callback(results);

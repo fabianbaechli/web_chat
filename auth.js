@@ -18,7 +18,6 @@ router.use(session({
 
 // Check if the user is logged in
 router.use("/auth/login", (req, res) => {
-    console.log("login attempt");
     // Only login if the user is not authenticated
     if (!req.session.authenticated) {
 
@@ -50,6 +49,8 @@ router.use("/auth/login", (req, res) => {
                 }
             });
         }
+    } else {
+        res.redirect("http://localhost:8080/chat_page")
     }
 });
 

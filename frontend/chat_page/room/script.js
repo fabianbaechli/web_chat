@@ -1,5 +1,6 @@
 let room_info = {};
 let roomNumber = new URL(window.location.href).searchParams.get("room_number");
+const ws = new WebSocket('ws://localhost:8080', 'echo-protocol');
 
 document.addEventListener('DOMContentLoaded', () => {
     httpRequest("/chat_page/chat_content?room_number=" + roomNumber, "GET", (response) => {
@@ -11,10 +12,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 // will replace with password input html page eventually
                 window.location.replace("http://localhost:8080/chat_page");
             } else if (room_info.joined_room === true) {
-                console.log(room_info)
+
             }
         }
     })
+});
+
+function sendMessage() {
+    const message = "hello";
+    ws.send(message);
+}
+ws.addEventListener("message", function(e) {
+    // The data is simply the message that we're sending back
+    const msg = e.data;
+
+    // Append the message
+    console.log(msg);
 });
 
 function httpRequest(path, method, callback) {
