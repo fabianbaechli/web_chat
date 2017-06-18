@@ -7,7 +7,7 @@ const hash = require('sha256');
 const auth = require("./auth.js");
 const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
-const WebSocketServer = require('websocket').server;
+const websocket = require('express-ws')(app);
 require('dotenv').config();
 let count = 0;
 let clients = {};
@@ -17,31 +17,11 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-websocket = new WebSocketServer({
-    httpServer: app
-});
-
-websocket.on('request', function (req) {
-    let connection = req.accept('echo-protocol', req.origin);
-    let id = count += 1;
-    clients[id] = connection;
-
-    connection.on('message', function (message) {
-        console.log(message);
-        const msgString = message.utf8Data;
-
-        // Loop through all clients
-        for (let i in clients) {
-            // Send a message to the client with the message
-            clients[i].sendUTF(msgString);
-        }
+app.ws('/chat_page/room', function(ws, req) {
+    ws.on('message', function(msg) {
+        console.log(msg);
     });
-
-    connection.on('close', function (reasonCode, description) {
-        delete clients[id];
-        console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
-    });
-    console.log((new Date()) + ' Connection accepted [' + id + ']');
+    console.log(ws);
 });
 
 // All files in the frontend folder are available without a cookie

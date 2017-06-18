@@ -1,9 +1,10 @@
 let room_info = {};
 let roomNumber = new URL(window.location.href).searchParams.get("room_number");
-const ws = new WebSocket('ws://localhost:8080', 'echo-protocol');
+const ws = new WebSocket('ws://localhost:8080/chat_page/room', 'echo-protocol');
 
 document.addEventListener('DOMContentLoaded', () => {
     httpRequest("/chat_page/chat_content?room_number=" + roomNumber, "GET", (response) => {
+        console.log("RESPONSE: " + response);
         room_info = JSON.parse(response);
         if (room_info.authenticated === false) {
             window.location.replace("http://localhost:8080/");
@@ -35,7 +36,9 @@ function httpRequest(path, method, callback) {
     http.open(method, path, true);
     http.send(null);
     http.onreadystatechange = () => {
-        callback(http.responseText);
+        if (http.responseText.length > 0) {
+            callback(http.responseText);
+        }
     };
     return http.responseText;
 }

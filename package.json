@@ -27,6 +27,7 @@
     "express": "*",
     "express-jwt": "*",
     "express-session": "*",
+    "express-ws": "^3.0.0",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "ldapjs": "*",
