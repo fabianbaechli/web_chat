@@ -3,7 +3,7 @@ let roomNumber = new URL(window.location.href).searchParams.get("room_number");
 const ws = new WebSocket('ws://localhost:8080/chat_page/room', 'echo-protocol');
 
 document.addEventListener('DOMContentLoaded', () => {
-    httpRequest("/chat_page/chat_content?room_number=" + roomNumber, "GET", (response) => {
+    httpRequest("/chat_page/join_chat?room_number=" + roomNumber, "GET", (response) => {
         console.log("RESPONSE: " + response);
         room_info = JSON.parse(response);
         if (room_info.authenticated === false) {

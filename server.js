@@ -7,7 +7,8 @@ const hash = require('sha256');
 const auth = require("./auth.js");
 const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
-const websocket = require('express-ws')(app);
+const ws = require('express-ws')(app);
+const chatrooms = getAllChatRooms();
 require('dotenv').config();
 let count = 0;
 let clients = {};
@@ -17,11 +18,10 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.ws('/chat_page/room', function(ws, req) {
-    ws.on('message', function(msg) {
+app.ws('/chat_page/room', function (ws, req) {
+    ws.on('message', function (msg) {
         console.log(msg);
     });
-    console.log(ws);
 });
 
 // All files in the frontend folder are available without a cookie
@@ -100,7 +100,7 @@ app.post("/chat_page/create_room_session", (req, res) => {
     }
 });
 
-app.get("/chat_page/chat_content", (req, res) => {
+app.get("/chat_page/join_chat", (req, res) => {
     const roomId = req.query.room_number;
     const userId = req.session.userId;
 
