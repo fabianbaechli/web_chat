@@ -32,23 +32,10 @@ function checkForm() {
 }
 
 function joinChat(id, password) {
-    console.log(id, password);
-    const http = new XMLHttpRequest();
+    console.log("hello");
     const params = "id=" + id + "&password=" + password;
-
-    http.open("POST", "/chat_page/create_room_session", true);
-    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    http.onreadystatechange = () => {
-        if (http.readyState === 4 && http.status === 200) {
-            console.log("TEXT: "+JSON.parse(http.responseText));
-            if (JSON.parse(http.responseText).joined_room === true) {
-                window.location.replace("http://localhost:8080/chat_page/room?room_number=" + id);
-            } else {
-                window.location.replace("http://localhost:8080/chat_page");
-            }
-        }
-    };
-    http.send(params);
+    const ws = new WebSocket('ws://localhost:8080/chat_page/room?' + params, 'echo-protocol');
+    window.location.href = "http://localhost:8080/chat_page/room?id=" + id;
 }
 
 function toggle_visibility(id) {
@@ -89,6 +76,7 @@ function displayContent(content) {
     row.onclick = () => {
         toggle_visibility('joinChatPopUp');
         let submitButton = document.getElementById("joinChatButton");
+
         submitButton.onclick = () => {
             console.log(document.getElementById("passwordField").value);
             const passwordValue = document.getElementById("passwordField").value;

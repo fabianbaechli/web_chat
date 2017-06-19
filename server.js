@@ -8,27 +8,26 @@ const auth = require("./auth.js");
 const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
 const ws = require('express-ws')(app);
-const chatrooms = getAllChatRooms();
+let chatrooms;
 require('dotenv').config();
-let count = 0;
-let clients = {};
+
+getAllChatRooms((results) => {
+    chatrooms = results;
+    chatrooms.map((room) => {
+        room.participants = [];
+    });
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 
-app.ws('/chat_page/room', function (ws, req) {
-    ws.on('message', function (msg) {
-        console.log(msg);
-    });
-});
+// Handles authentication
+app.use(auth.router);
 
 // All files in the frontend folder are available without a cookie
 app.use(express.static('frontend'));
-
-// Handles authentication
-app.use(auth.router);
 
 app.post("/createUser", (req, res) => {
     // Input validation
@@ -74,55 +73,6 @@ app.get("/chat_page/user_info", (req, res) => {
     })
 });
 
-app.post("/chat_page/create_room_session", (req, res) => {
-    if (req.session.authenticated === true) {
-        const roomId = db.escape(req.body.id);
-        const userId = req.session.userId;
-        let password = hash.x2(req.body.password);
-
-        getChatSession(userId, roomId, (results) => {
-            if (results.length !== 1) {
-                getRoomPassword(roomId, (room_password) => {
-                    if (room_password === password) {
-                        createChatSession(req.session.userId, roomId, (results) => {
-                            res.send({joined_room: true});
-                        });
-                    } else {
-                        res.json({joined_room: false})
-                    }
-                });
-            } else {
-                res.json({joined_room: true});
-            }
-        })
-    } else {
-        res.json({authenticated: false})
-    }
-});
-
-app.get("/chat_page/join_chat", (req, res) => {
-    const roomId = req.query.room_number;
-    const userId = req.session.userId;
-
-    if (userId === undefined) {
-        res.json({authenticated: false});
-    } else if (roomId === undefined) {
-        res.send("missing room_number parameter in link");
-    } else {
-        getChatSession(userId, roomId, (results) => {
-            if (results.length <= 0) {
-                res.json({joined_room: false})
-            } else {
-                // the user has a chat session on the server
-                getUsersInChatRoom(roomId, (results) => {
-                    console.log("user: " + userId + " joined room " + roomId);
-                    res.json({joined_room: true, results});
-                })
-            }
-        })
-    }
-});
-
 app.post("/chat_page/create_chat_room", (req, res) => {
     if ((inputValidator.validateRoomName(req.body.roomName)) &&
         (inputValidator.validateMaxParticipants(req.body.maxParticipants)) &&
@@ -137,9 +87,7 @@ app.post("/chat_page/create_chat_room", (req, res) => {
             password = db.escape(password);
 
             createChatRoom(maxParticipants, userId, password, roomName, (results) => {
-                createChatSession(userId, results.insertId, (results) => {
-                    res.redirect("/chat_page/");
-                });
+                res.redirect("/chat_page/");
             });
         } else {
             res.json({user_authenticated: false})
@@ -157,6 +105,33 @@ app.get('/chat_page/chat_rooms', (req, res) => {
     }
 });
 
+app.ws('/chat_page/room', function (ws, req) {
+    if (req.session.authenticated === true) {
+        const roomId = parseInt(req.query.id);
+        const userId = req.session.userId;
+        let password = hash.x2(req.query.password);
+
+        getRoomPassword(roomId, (room_password) => {
+            if (room_password === password) {
+                for (let i = 0; i < chatrooms.length; i++) {
+                    if (chatrooms[i].id === roomId) {
+                        console.log("user: " + userId + " joined room " + roomId);
+                        chatrooms[i].participants.push({userId: userId, ws: ws});
+                    }
+                }
+            }
+        });
+
+        ws.on('message', function (msg) {
+            console.log("received message: " + msg);
+            for (let i = 0; i < chatrooms.length; i++) {
+                if (chatrooms[i].id === roomId) {
+                    console.log("message: " + msg + " for room");
+                }
+            }
+        });
+    }
+});
 app.listen(8080);
 console.log(new Date + " Server listening on port 8080");
 
@@ -165,25 +140,6 @@ function createChatRoom(maxParticipants, userId, password, roomName, callback) {
     const queryString = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
         "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";
 
-    db.query(queryString, (error, results) => {
-        if (error) console.log(error);
-        else callback(results);
-    });
-}
-function getUsersInChatRoom(roomId, callback) {
-    const queryString = "SELECT user.`user_name` FROM users_chatrooms AS temp_table " +
-        "INNER JOIN users as user ON temp_table.`user_fk` = user.`id` " +
-        "INNER JOIN chat_room as room ON temp_table.`chat_room_fk` = room.`id` " +
-        "WHERE room.id = " + db.escape(roomId);
-
-    db.query(queryString, (error, results) => {
-        if (error) console.log(error);
-        else callback(results)
-    })
-}
-function getChatSession(userId, roomId, callback) {
-    const queryString = "SELECT * from users_chatrooms WHERE user_fk = " + db.escape(userId) + " AND chat_room_fk = " +
-        roomId;
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
         else callback(results);
@@ -200,14 +156,6 @@ function getAllChatRooms(callback) {
     const queryString = "SELECT chat_room.id, max_participants, chat_room.room_name, users.user_name AS admin from chat_room " +
         "INNER JOIN users ON chat_room.admin = users.id";
 
-    db.query(queryString, (error, results) => {
-        if (error) console.log(error);
-        else callback(results);
-    });
-}
-function createChatSession(user_fk, chat_room_fk, callback) {
-    const queryString = "INSERT INTO users_chatrooms (user_fk, chat_room_fk) VALUES " +
-        "(" + user_fk + "," + chat_room_fk + ")";
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
         else callback(results);
