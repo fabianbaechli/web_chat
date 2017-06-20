@@ -105,33 +105,58 @@ app.get('/chat_page/chat_rooms', (req, res) => {
     }
 });
 
-app.ws('/chat_page/room', function (ws, req) {
+app.post("/chat_page/join_room", (req, res) => {
     if (req.session.authenticated === true) {
-        const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
-        let password = hash.x2(req.query.password);
+        const roomId = parseInt(req.body.id);
+        const password = hash.x2(req.body.password);
 
         getRoomPassword(roomId, (room_password) => {
             if (room_password === password) {
                 for (let i = 0; i < chatrooms.length; i++) {
                     if (chatrooms[i].id === roomId) {
                         console.log("user: " + userId + " joined room " + roomId);
-                        chatrooms[i].participants.push({userId: userId, ws: ws});
+                        chatrooms[i].participants.push({uid: userId});
+                        res.json({joined_room: true});
                     }
                 }
             }
         });
 
+    } else {
+        res.json({user_authenticated: false})
+    }
+});
+
+app.ws('/chat_page/room', function (ws, req) {
+    if (req.session.authenticated === true) {
+        const roomId = parseInt(req.query.id);
+        const userId = req.session.userId;
+        for (let i = 0; i < chatrooms.length; i++) {
+            if (chatrooms[i].id === roomId) {
+                for (let y = 0; y < chatrooms[i].participants.length; y++) {
+                    if (chatrooms[i].participants[y].uid === userId) {
+                        chatrooms[i].participants[y] = {userId: userId, ws: ws};
+                    }
+                }
+            }
+        }
+
         ws.on('message', function (msg) {
-            console.log("received message: " + msg);
             for (let i = 0; i < chatrooms.length; i++) {
                 if (chatrooms[i].id === roomId) {
-                    console.log("message: " + msg + " for room");
+                    console.log("message: " + msg + " for room: " + roomId);
+                    for (let y = 0; y < chatrooms[i].participants.length; y++) {
+                        if (chatrooms[i].participants[y].userId !== undefined) {
+                            console.log("message for user: " + chatrooms[i].participants[y].userId);
+                        }
+                    }
                 }
             }
         });
     }
 });
+
 app.listen(8080);
 console.log(new Date + " Server listening on port 8080");
 

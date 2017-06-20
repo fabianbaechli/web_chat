@@ -18,39 +18,33 @@ router.use(session({
 
 // Check if the user is logged in
 router.use("/auth/login", (req, res) => {
-    // Only login if the user is not authenticated
-    if (!req.session.authenticated) {
+    req.session.authenticated = false;
 
-        // Defaults to false
-        req.session.authenticated = false;
+    // Check if a password and username was given
+    if (req.body.password && req.body.username) {
+        const username = req.body.username;
+        const password = hash.x2(req.body.password);
+        const queryString = "SELECT * FROM users WHERE user_name = " + db.escape(username);
 
-        // Check if a password and username was given
-        if (req.body.password && req.body.username) {
-            const username = req.body.username;
-            const password = hash.x2(req.body.password);
-            const queryString = "SELECT * FROM users WHERE user_name = " + db.escape(username);
+        db.query(queryString, (error, results) => {
+            if (error) {
+                throw error;
+            }
 
-            db.query(queryString, (error, results) => {
-                if (error) {
-                    throw error;
-                }
-
-                if (results.length === 0) {
-                    res.json({authenticated: false});
+            if (results.length === 0) {
+                res.json({authenticated: false});
+            } else {
+                if (results[0].password === password) {
+                    req.chatrooms = [];
+                    req.session.authenticated = true;
+                    req.session.username = username;
+                    req.session.userId = results[0].id;
+                    res.redirect("/chat_page");
                 } else {
-                    if (results[0].password === password) {
-                        req.session.authenticated = true;
-                        req.session.username = username;
-                        req.session.userId = results[0].id;
-                        res.redirect("/chat_page");
-                    } else {
-                        res.json({authenticated: false});
-                    }
+                    res.json({authenticated: false});
                 }
-            });
-        }
-    } else {
-        res.redirect("http://localhost:8080/chat_page")
+            }
+        });
     }
 });
 

@@ -1,6 +1,8 @@
 let room_info = {};
-let roomNumber = new URL(window.location.href).searchParams.get("room_number");
-const ws = new WebSocket('ws://localhost:8080/chat_page/room', 'echo-protocol');
+let id = new URL(window.location.href).searchParams.get("id");
+let password = new URL(window.location.href).searchParams.get("password");
+
+const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id + '&password=' + password, 'echo-protocol');
 
 document.addEventListener('DOMContentLoaded', () => {
 });

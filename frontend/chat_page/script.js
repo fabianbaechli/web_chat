@@ -32,10 +32,18 @@ function checkForm() {
 }
 
 function joinChat(id, password) {
-    console.log("hello");
+    const http = new XMLHttpRequest();
+    const url = "http://localhost:8080/chat_page/join_room";
     const params = "id=" + id + "&password=" + password;
-    const ws = new WebSocket('ws://localhost:8080/chat_page/room?' + params, 'echo-protocol');
-    window.location.href = "http://localhost:8080/chat_page/room?id=" + id;
+    http.open("POST", url, true);
+
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    http.onreadystatechange = function () {
+        if (http.readyState == 4 && http.status == 200) {
+            window.location.href = "http://localhost:8080/chat_page/room?" + params;
+        }
+    };
+    http.send(params);
 }
 
 function toggle_visibility(id) {
