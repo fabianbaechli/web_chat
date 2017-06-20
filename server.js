@@ -147,9 +147,7 @@ app.ws('/chat_page/room', function (ws, req) {
                 if (chatrooms[i].id === roomId) {
                     console.log("message: " + msg + " for room: " + roomId);
                     for (let y = 0; y < chatrooms[i].participants.length; y++) {
-                        if (chatrooms[i].participants[y].userId !== undefined) {
-                            console.log("message for user: " + chatrooms[i].participants[y].userId);
-                        }
+                        console.log("message for user: " + chatrooms[i].participants[y].userId);
                     }
                 }
             }

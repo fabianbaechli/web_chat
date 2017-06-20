@@ -35,7 +35,7 @@ router.use("/auth/login", (req, res) => {
                 res.json({authenticated: false});
             } else {
                 if (results[0].password === password) {
-                    req.chatrooms = [];
+//                    req.chatrooms = [];
                     req.session.authenticated = true;
                     req.session.username = username;
                     req.session.userId = results[0].id;

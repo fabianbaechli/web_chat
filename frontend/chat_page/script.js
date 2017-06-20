@@ -40,7 +40,7 @@ function joinChat(id, password) {
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.onreadystatechange = function () {
         if (http.readyState == 4 && http.status == 200) {
-            window.location.href = "http://localhost:8080/chat_page/room?" + params;
+            window.location.href = "http://localhost:8080/chat_page/room?id=" + id;
         }
     };
     http.send(params);
