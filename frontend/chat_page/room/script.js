@@ -2,7 +2,7 @@ let room_info = {};
 let id = new URL(window.location.href).searchParams.get("id");
 let password = new URL(window.location.href).searchParams.get("password");
 
-const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id + '&password=' + password, 'echo-protocol');
+const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
 document.addEventListener('DOMContentLoaded', () => {
 });
@@ -14,7 +14,7 @@ function sendMessage() {
 }
 
 ws.addEventListener("message", function(event) {
-    console.log(event.data);
+    console.log("received data: " + event.data);
 });
 
 function httpRequest(path, method, callback) {

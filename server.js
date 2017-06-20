@@ -148,6 +148,11 @@ app.ws('/chat_page/room', function (ws, req) {
                     console.log("message: " + msg + " for room: " + roomId);
                     for (let y = 0; y < chatrooms[i].participants.length; y++) {
                         console.log("message for user: " + chatrooms[i].participants[y].userId);
+                        try {
+                            chatrooms[i].participants[y].ws.send(msg);
+                        } catch (e) {
+                            console.log("user: " + chatrooms[i].participants[y].userId + " not available");
+                        }
                     }
                 }
             }
