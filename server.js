@@ -9,7 +9,12 @@ const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
 const ws = require('express-ws')(app);
 let chatrooms;
+let users;
 require('dotenv').config();
+
+getAllUsers((results) => {
+    users = results;
+});
 
 getAllChatRooms((results) => {
     chatrooms = results;
@@ -116,7 +121,7 @@ app.post("/chat_page/join_room", (req, res) => {
                 for (let i = 0; i < chatrooms.length; i++) {
                     if (chatrooms[i].id === roomId) {
                         console.log("user: " + userId + " joined room " + roomId);
-                        chatrooms[i].participants.push({uid: userId});
+                        chatrooms[i].participants.push({userId: userId});
                         res.json({joined_room: true});
                     }
                 }
@@ -127,15 +132,51 @@ app.post("/chat_page/join_room", (req, res) => {
         res.json({user_authenticated: false})
     }
 });
+app.get("/chat_page/room/info", (req, res) => {
+    if (req.session.authenticated === true) {
+        const roomId = parseInt(req.query.id);
+        const userId = req.session.userId;
+
+        for (let i = 0; i < chatrooms.length; i++) {
+            if (chatrooms[i].id === roomId) {
+                let isInRoom = false;
+                let response = [];
+
+                for (let y = 0; y < chatrooms[i].participants.length; y++) {
+                    if (chatrooms[i].participants[y].userId === userId) {
+                        isInRoom = true;
+                    }
+                }
+                if (isInRoom) {
+                    // Gets all users in chat room
+                    for (let y = 0; y < chatrooms[i].participants.length; y++) {
+                        for (let p = 0; p  < users.length; p++) {
+                            if (users[p].id === chatrooms[i].participants[y].userId) {
+                                response.push(users[p])
+                            }
+                        }
+                    }
+                    res.json(response);
+                } else {
+                    res.json({inRoom: false});
+                }
+            }
+        }
+
+    } else {
+        res.json({authenticated: false})
+    }
+});
 
 app.ws('/chat_page/room', function (ws, req) {
     if (req.session.authenticated === true) {
         const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
+
         for (let i = 0; i < chatrooms.length; i++) {
             if (chatrooms[i].id === roomId) {
                 for (let y = 0; y < chatrooms[i].participants.length; y++) {
-                    if (chatrooms[i].participants[y].uid === userId) {
+                    if (chatrooms[i].participants[y].id === userId) {
                         chatrooms[i].participants[y] = {userId: userId, ws: ws};
                     }
                 }
@@ -160,10 +201,26 @@ app.ws('/chat_page/room', function (ws, req) {
     }
 });
 
+function findUsername(id) {
+    for (let i = 0; i < users.length; i++) {
+        if (users[i].id === id) {
+            return users[i].name;
+        }
+    }
+}
+
 app.listen(8080);
 console.log(new Date + " Server listening on port 8080");
 
 // DB queries
+function getAllUsers(callback) {
+    const queryString = "select id, user_name as name from users";
+
+    db.query(queryString, (error, results) => {
+        if (error) console.log(error);
+        else callback(results);
+    });
+}
 function createChatRoom(maxParticipants, userId, password, roomName, callback) {
     const queryString = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
         "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";

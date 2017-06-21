@@ -14,6 +14,9 @@ body {
     left: 90%;
     top: 80%;
 }
+#connectionState {
+    left: 80%;
+}
 
 #main {
     background-color: white;

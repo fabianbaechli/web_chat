@@ -1,6 +1,14 @@
-let room_info = {};
+let roomParticipants = {};
 let id = new URL(window.location.href).searchParams.get("id");
-let password = new URL(window.location.href).searchParams.get("password");
+
+chatInfo = JSON.parse(httpRequest("/chat_page/room/info?id=" + id, "GET", (response) => {
+    try {
+        roomParticipants = JSON.parse(response)
+        console.log(roomParticipants)
+    } catch (e) {
+        console.log("Server is broken boiii");
+    }
+}));
 
 const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
@@ -13,7 +21,7 @@ function sendMessage() {
     ws.send(message);
 }
 
-ws.addEventListener("message", function(event) {
+ws.addEventListener("message", function (event) {
     console.log("received data: " + event.data);
 });
 
