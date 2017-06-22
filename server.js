@@ -9,6 +9,8 @@ const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
 const ws = require('express-ws')(app);
 let chatrooms;
+// contains objects in this form {useId: <value>, chatroom: <value>}
+let pendingConnections = [];
 let users;
 require('dotenv').config();
 
@@ -122,7 +124,8 @@ app.post("/chat_page/join_room", (req, res) => {
                 chatrooms.forEach((item, index) => {
                     if (item.id === roomId) {
                         console.log("user: " + userId + " joined room " + roomId);
-                        chatrooms[index].participants.push({userId: userId});
+//                        chatrooms[index].participants.push({userId: userId});
+                        pendingConnections.push({userId: userId, roomId: roomId});
                         res.json({joined_room: true});
                     }
                 })
@@ -157,30 +160,46 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
     }
 });
 
-app.ws('/chat_page/room', function (ws, req) {
+app.ws('/chat_page/room', (ws, req) => {
     if (req.session.authenticated === true) {
         const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
 
         getRoom(roomId, (room) => {
-            for (let y = 0; y < room.participants.length; y++) {
-                if (room.participants[y].userId === userId) {
-                    room.participants[y] = {userId: userId, ws: ws};
+            for (let i = 0; i < pendingConnections.length; i++) {
+                if (pendingConnections[i].userId === userId &&
+                    pendingConnections[i].roomId === roomId) {
+                    room.participants.push({userId: userId, ws: ws});
+                    pendingConnections.splice(i, 1);
                 }
             }
         });
 
-        ws.on('message', function (msg) {
+        ws.on('message', (msg) => {
             getRoom(roomId, (room) => {
                 console.log("message: " + msg + " for room: " + room.id);
                 room.participants.forEach((user) => {
                     console.log("\t to user: " + user.userId);
                     try {
-                        user.ws.send(msg);
+                        if (user.ws !== undefined) {
+                            user.ws.send(msg);
+                        }
                     } catch (e) {
                         console.log("user: " + user.userId + " not available");
                     }
                 });
+            });
+        });
+
+        ws.on('close', (exitState) => {
+            getRoom(roomId, (room) => {
+                for (let i = 0; i < room.participants.length; i++) {
+                    console.log("hello");
+                    if (room.participants[i].userId === userId) {
+                        room.participants.splice(i, 1);
+                        pendingConnections.push({userId: userId, roomId: roomId});
+                    }
+                }
             });
         });
     }
@@ -192,9 +211,9 @@ function getAllUsersInRoom(roomId, callback) {
         let response = [];
         room.participants.forEach((participant) => {
             users.forEach((user) => {
-               if (user.userId === participant.userId) {
-                   response.push(user);
-               }
+                if (user.userId === participant.userId) {
+                    response.push(user);
+                }
             })
         });
         callback(response);
@@ -214,6 +233,7 @@ function checkIfUserIsInRoom(roomId, userId, callback) {
         callback(isInRoom);
     });
 }
+
 function getRoom(roomId, callback) {
     // Iterates over all chat rooms
     for (let i = 0; i < chatrooms.length; i++) {
