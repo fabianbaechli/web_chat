@@ -3,7 +3,7 @@ let id = new URL(window.location.href).searchParams.get("id");
 
 chatInfo = httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
     try {
-        roomParticipants = JSON.parse(response);
+        roomParticipants = response;
         if (roomParticipants.length === 0) {
             window.location.href = "http://localhost:8080/chat_page";
         } else {
