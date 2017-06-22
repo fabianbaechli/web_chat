@@ -132,41 +132,59 @@ app.post("/chat_page/join_room", (req, res) => {
         res.json({user_authenticated: false})
     }
 });
-app.get("/chat_page/room/info", (req, res) => {
+
+app.get("/chat_page/room/users_in_room", (req, res) => {
     if (req.session.authenticated === true) {
         const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
 
-        for (let i = 0; i < chatrooms.length; i++) {
-            if (chatrooms[i].id === roomId) {
-                let isInRoom = false;
-                let response = [];
-
-                for (let y = 0; y < chatrooms[i].participants.length; y++) {
-                    if (chatrooms[i].participants[y].userId === userId) {
-                        isInRoom = true;
-                    }
-                }
-                if (isInRoom) {
-                    // Gets all users in chat room
-                    for (let y = 0; y < chatrooms[i].participants.length; y++) {
-                        for (let p = 0; p  < users.length; p++) {
-                            if (users[p].id === chatrooms[i].participants[y].userId) {
-                                response.push(users[p])
-                            }
-                        }
-                    }
-                    res.json(response);
-                } else {
-                    res.json({inRoom: false});
-                }
+        checkIfUserIsInRoom(roomId, userId, (isInRoom) => {
+            if (isInRoom) {
+                getAllUsersInRoom(roomId, (users) => res.send(users));
+            } else {
+                res.json({inRoom: false});
             }
-        }
-
+        });
     } else {
         res.json({authenticated: false})
     }
 });
+
+function getAllUsersInRoom(roomId, callback) {
+    getRoom(roomId, (room) => {
+        let response = [];
+        for (let i = 0; i < room.participants.length; i++) {
+            for (let y = 0; y < users.length; y++) {
+                if (users[y].id === room.participants[i].userId) {
+                    response.push(users[y])
+                }
+            }
+        }
+        callback(response);
+    });
+}
+
+function checkIfUserIsInRoom(roomId, userId, callback) {
+    getRoom(roomId, (roomToCheck) => {
+        let isInRoom = false;
+        // Iterates over all users in correct chat room
+        for (let y = 0; y < roomToCheck.participants.length; y++) {
+            // The user is in the room
+            if (roomToCheck.participants[y].userId === userId) {
+                isInRoom = true;
+            }
+        }
+        callback(isInRoom);
+    });
+}
+function getRoom(roomId, callback) {
+    // Iterates over all chat rooms
+    for (let i = 0; i < chatrooms.length; i++) {
+        if (chatrooms[i].id === roomId) {
+            callback(chatrooms[i]);
+        }
+    }
+}
 
 app.ws('/chat_page/room', function (ws, req) {
     if (req.session.authenticated === true) {
