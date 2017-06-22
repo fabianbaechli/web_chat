@@ -1,13 +1,22 @@
 let roomParticipants = {};
+
 let id = new URL(window.location.href).searchParams.get("id");
 
+document.addEventListener('keyup', (event) => {
+    if (event.code === "Enter") {
+        if (document.getElementById("inputArea") === document.activeElement) {
+            sendMessage();
+        }
+    }
+});
 chatInfo = httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
     try {
         roomParticipants = response;
-        if (roomParticipants.length === 0) {
+        if (roomParticipants.authenticated === false) {
             window.location.href = "http://localhost:8080/chat_page";
         } else {
             console.log(roomParticipants)
+            // display participants
         }
     } catch (e) {
         console.log("Server is broken boiii");
@@ -20,8 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function sendMessage() {
-    const message = "hello";
-    console.log("sent message");
+    let textInput = document.getElementById("inputArea");
+    const message = textInput.value;
+    textInput.value = "";
+    console.log("sent message: " + message);
     ws.send(message);
 }
 

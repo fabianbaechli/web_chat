@@ -121,7 +121,7 @@ app.post("/chat_page/join_room", (req, res) => {
 
         getRoomPassword(roomId, (room_password) => {
             if (room_password === password) {
-                chatrooms.forEach((item, index) => {
+                chatrooms.forEach((item) => {
                     if (item.id === roomId) {
                         console.log("user: " + userId + " joined room " + roomId);
 //                        chatrooms[index].participants.push({userId: userId});
@@ -191,7 +191,7 @@ app.ws('/chat_page/room', (ws, req) => {
             });
         });
 
-        ws.on('close', (exitState) => {
+        ws.on('close', () => {
             getRoom(roomId, (room) => {
                 for (let i = 0; i < room.participants.length; i++) {
                     console.log("hello");
@@ -251,9 +251,6 @@ function findUsername(id) {
     }
 }
 
-app.listen(8080);
-console.log(new Date + " Server listening on port 8080");
-
 // DB queries
 function getAllUsers(callback) {
     const queryString = "select id as userId, user_name as name from users";
@@ -303,3 +300,6 @@ function createUser(fullName, username, password, email, profilePicture, callbac
         else callback(results);
     });
 }
+
+app.listen(8080);
+console.log(new Date + " Server listening on port 8080");
