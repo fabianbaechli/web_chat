@@ -191,6 +191,9 @@ app.ws('/chat_page/room', (ws, req) => {
             });
         });
 
+        // Deletes the user from the room.participants array
+        // Puts the user in the pendingConnections array
+            // So that if he reopens the tab he gets reconnected
         ws.on('close', () => {
             getRoom(roomId, (room) => {
                 for (let i = 0; i < room.participants.length; i++) {
