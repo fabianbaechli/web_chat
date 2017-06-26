@@ -1,5 +1,6 @@
 let roomParticipants = {};
 let id = new URL(window.location.href).searchParams.get("id");
+let userId;
 const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
 document.addEventListener('keyup', (event) => {
@@ -19,7 +20,8 @@ httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
         } else if (roomParticipants.inRoom === false) {
             console.log("not in room")
         } else {
-
+            console.log(roomParticipants)
+            userId = roomParticipants.userId;
         }
     } catch (e) {
         console.log("Server is broken boiii");
@@ -32,9 +34,16 @@ function sendMessage() {
     textInput.value = "";
     console.log("sent message: " + message);
     ws.send(message);
+}
+
+function displayMessage(message, senderId) {
     const table = document.getElementById("table");
     const row = document.createElement("li");
-    row.className = "own";
+    if (senderId === userId) {
+        row.className = "own";
+    } else {
+        row.className = "other";
+    }
 
     let paragraph = document.createElement("P");
     paragraph.className = "message_content";
@@ -43,11 +52,18 @@ function sendMessage() {
     row.appendChild(paragraph);
 
     table.appendChild(row);
-
 }
 
 ws.addEventListener("message", function (event) {
-    console.log("received data: " + event.data);
+    const message = JSON.parse(event.data);
+    const senderId = message.senderId;
+    const text = message.text;
+    console.log("-------");
+    console.log(senderId);
+    console.log(text);
+    console.log(userId);
+    console.log("-------");
+    displayMessage(text, senderId)
 });
 
 function httpRequest(path, method, callback) {

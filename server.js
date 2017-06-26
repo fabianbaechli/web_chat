@@ -148,7 +148,7 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
                     users.forEach((user) => {
                         response.push(findUsername(user.userId))
                     });
-                    res.send({response});
+                    res.send({users: response, userId: userId});
                 });
             } else {
                 res.json({inRoom: false});
@@ -186,7 +186,7 @@ app.ws('/chat_page/room', (ws, req) => {
                     console.log("\t to user: " + user.userId);
                     try {
                         if (user.ws !== undefined) {
-                            user.ws.send(msg);
+                            user.ws.send({text: msg, senderId: userId});
                         }
                     } catch (e) {
                         console.log("user: " + user.userId + " not available");
