@@ -1,8 +1,16 @@
-body {
+html, body {
     background-color: #0f3ea3;
-    height: 100%;
-    width: 100%;
     font-family: 'roboto', sans-serif;
+    margin: 0 auto;
+}
+
+::selection {
+    background: rgba(82, 179, 217, 0.3);
+    color: inherit;
+}
+
+a {
+    color: rgba(82, 179, 217, 0.9);
 }
 
 #bottom {
@@ -11,15 +19,18 @@ body {
     position: absolute;
     bottom: 0;
 }
+
 #connectionDiv {
     width: 100%;
     height: 5%;
     position: absolute;
 }
+
 #connectionState {
     position: absolute;
     left: 2%;
 }
+
 .button {
     outline: none;
 }
@@ -73,4 +84,51 @@ body {
 
 #sendButton:hover {
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.chat {
+    width: 100%;
+    height: 75%;
+    top: 10%;
+    position: relative;
+}
+
+#table {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+    overflow-y: scroll;
+}
+
+.other {
+    list-style: none;
+    margin-left: 2%;
+}
+
+.own {
+    text-align: left;
+    list-style: none;
+}
+
+.message_content {
+    word-wrap: break-word;
+    white-space: normal;
+    max-width: 70%;
+}
+
+.other .message_content {
+    left: 0;
+    margin-right: 40%;
+    margin-left: 2%;
+}
+
+.own .message_content {
+    right: 0;
+    margin-left: 40%;
+    margin-right: 2%;
 }

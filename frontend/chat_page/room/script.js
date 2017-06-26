@@ -15,11 +15,11 @@ httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
     try {
         roomParticipants = JSON.parse(response);
         if (roomParticipants.authenticated === false) {
-
+            console.log("not authenticated")
         } else if (roomParticipants.inRoom === false) {
-
+            console.log("not in room")
         } else {
-            document.getElementById("connectionState").value = ""
+
         }
     } catch (e) {
         console.log("Server is broken boiii");
@@ -32,6 +32,18 @@ function sendMessage() {
     textInput.value = "";
     console.log("sent message: " + message);
     ws.send(message);
+    const table = document.getElementById("table");
+    const row = document.createElement("li");
+    row.className = "own";
+
+    let paragraph = document.createElement("P");
+    paragraph.className = "message_content";
+    const text = document.createTextNode(message);
+    paragraph.appendChild(text);
+    row.appendChild(paragraph);
+
+    table.appendChild(row);
+
 }
 
 ws.addEventListener("message", function (event) {
