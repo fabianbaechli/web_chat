@@ -1,31 +1,29 @@
 let roomParticipants = {};
-
 let id = new URL(window.location.href).searchParams.get("id");
+const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
 document.addEventListener('keyup', (event) => {
     if (event.code === "Enter") {
         if (document.getElementById("inputArea") === document.activeElement) {
+            event.preventDefault();
             sendMessage();
         }
     }
 });
-chatInfo = httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
+
+httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
     try {
-        roomParticipants = response;
+        roomParticipants = JSON.parse(response);
         if (roomParticipants.authenticated === false) {
-            window.location.href = "http://localhost:8080/chat_page";
+
+        } else if (roomParticipants.inRoom === false) {
+
         } else {
-            console.log(roomParticipants)
-            // display participants
+            document.getElementById("connectionState").value = ""
         }
     } catch (e) {
         console.log("Server is broken boiii");
     }
-});
-
-const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
-
-document.addEventListener('DOMContentLoaded', () => {
 });
 
 function sendMessage() {

@@ -124,7 +124,6 @@ app.post("/chat_page/join_room", (req, res) => {
                 chatrooms.forEach((item) => {
                     if (item.id === roomId) {
                         console.log("user: " + userId + " joined room " + roomId);
-//                        chatrooms[index].participants.push({userId: userId});
                         pendingConnections.push({userId: userId, roomId: roomId});
                         res.json({joined_room: true});
                     }
@@ -165,6 +164,9 @@ app.ws('/chat_page/room', (ws, req) => {
         const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
 
+        // Opens up a webscocket connection if the user is in the pending connections array
+        // If his id is found in the array, he gets deleted from pending connections
+        // And added to the room.participants array in the from: {id:<userId>, ws:<newly created ws connection>}
         getRoom(roomId, (room) => {
             for (let i = 0; i < pendingConnections.length; i++) {
                 if (pendingConnections[i].userId === userId &&
@@ -175,6 +177,8 @@ app.ws('/chat_page/room', (ws, req) => {
             }
         });
 
+        // Figures out for which chatroom the message was
+        // Loops through all the users from that chatroom and sends the message to the ws object
         ws.on('message', (msg) => {
             getRoom(roomId, (room) => {
                 console.log("message: " + msg + " for room: " + room.id);
@@ -197,7 +201,6 @@ app.ws('/chat_page/room', (ws, req) => {
         ws.on('close', () => {
             getRoom(roomId, (room) => {
                 for (let i = 0; i < room.participants.length; i++) {
-                    console.log("hello");
                     if (room.participants[i].userId === userId) {
                         room.participants.splice(i, 1);
                         pendingConnections.push({userId: userId, roomId: roomId});
