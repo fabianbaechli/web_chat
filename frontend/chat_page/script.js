@@ -22,6 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("connectedAs").innerHTML = "Not Authenticated";
         console.log("not authenticated hombre");
     }
+    document.getElementById("newChat").addEventListener('click', function (event) {
+        if (event.target !== this) {
+            return;
+        }
+        toggle_visibility("newChat")
+    });
+
+    document.getElementById('joinChatPopUp').addEventListener('click', function (event) {
+        if (event.target !== this) {
+            return;
+        }
+        toggle_visibility("joinChatPopUp")
+    });
 });
 
 function checkForm() {

@@ -120,28 +120,30 @@ td {
     vertical-align: middle;
     font-weight: 300;
 }
+
 .popupWrapper {
     top: 0;
     left: 0;
-    position: fixed;
+    position: absolute;
     width: 100%;
-    height: 120%;
+    height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
     display: none;
 }
 
 #popupBoxContent {
     width: 40%;
-    height: 44%;
-    margin: 50px auto;
+    height: 53%;
+    position: absolute;
+    top: 10%;
+    left: 30%;
     background-color: #FFF;
-    padding: 15px;
     text-align: center;
 }
 
 #join_chat {
     width: 40%;
-    height: 18%;
+    height: 23%;
     margin: 50px auto;
     background-color: #FFF;
     padding: 15px;
@@ -152,7 +154,7 @@ td {
     background-color: #E91E63;
     border: none;
     color: white;
-    width: 20%;
+    width: 80px;
     height: 35px;
     text-align: center;
     text-decoration: none;
@@ -169,7 +171,7 @@ td {
     background-color: #E91E63;
     border: none;
     color: white;
-    width: 20%;
+    width: 100px;
     height: 35px;
     text-align: center;
     text-decoration: none;
@@ -184,7 +186,7 @@ td {
 
 input {
     margin-left: 35%;
-    margin-top: 5%;
+    margin-top: 15px;
     width: 30%;
     height: 20px;
     display: block;

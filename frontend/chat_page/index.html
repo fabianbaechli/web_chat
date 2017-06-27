@@ -25,21 +25,19 @@
         <h3>Create a new Chat Room!</h3>
         <form onsubmit="return checkForm()" action="http://localhost:8080/chat_page/create_chat_room"
               method="post">
-            <div id="newEntryArea">
-                <input id="roomNameTextField" name="roomName" placeholder="Room Name" type="text"
-                       onchange="validateRoomName()" required="">
-                <br>
-                <input id="maxParticipantsNumField" name="maxParticipants" placeholder="Max Participants" type="number"
-                       onchange="validateMaxParticipants()" required="">
-                <br>
-                <input id="passwordTextField" name="password" placeholder="Room Password" type="password"
-                       onchange="validatePassword()" required="">
-                <br>
-                <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"
-                       onchange="validateRetypedPassword()" required="">
-                <br>
-                <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
-            </div>
+            <input id="roomNameTextField" name="roomName" placeholder="Room Name" type="text"
+                   onchange="validateRoomName()" required="">
+            <br>
+            <input id="maxParticipantsNumField" name="maxParticipants" placeholder="Max Participants" type="number"
+                   onchange="validateMaxParticipants()" required="">
+            <br>
+            <input id="passwordTextField" name="password" placeholder="Room Password" type="password"
+                   onchange="validatePassword()" required="">
+            <br>
+            <input id="passwordRetypeTextField" name="retypePassword" placeholder="Retype Password" type="password"
+                   onchange="validateRetypedPassword()" required="">
+            <br>
+            <button id="submitButton" type="submit" class="button"><span>Submit </span></button>
         </form>
     </div>
 </div>
