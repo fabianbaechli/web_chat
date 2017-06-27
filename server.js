@@ -167,7 +167,7 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
                     users.forEach((user) => {
                         response.push(findUsername(user.userId))
                     });
-                    res.send({users: response, userId: userId});
+                    res.send({users: response, userId: userId, username: findUsername(userId)});
                 });
             } else {
                 res.json({inRoom: false});

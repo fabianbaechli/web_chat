@@ -26,11 +26,6 @@ a {
     position: absolute;
 }
 
-#connectionState {
-    position: absolute;
-    left: 2%;
-}
-
 .button {
     outline: none;
 }
@@ -127,6 +122,14 @@ li {
     margin-right: 2%;
 }
 
+#connectionState {
+    margin-top: 2%;
+    margin-left: 2%;
+    font-weight: lighter;
+    color: white;
+    max-width: 30%;
+    float: left;
+}
 .other .senderInfo {
     white-space: nowrap;
     font-size: 10px;

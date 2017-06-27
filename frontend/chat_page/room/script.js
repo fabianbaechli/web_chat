@@ -1,5 +1,5 @@
-let roomParticipants = {};
 let id = new URL(window.location.href).searchParams.get("id");
+let roomInformation = {};
 let userId;
 const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
@@ -14,14 +14,14 @@ document.addEventListener('keyup', (event) => {
 
 httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
     try {
-        roomParticipants = JSON.parse(response);
-        if (roomParticipants.authenticated === false) {
+        roomInformation = JSON.parse(response);
+        if (roomInformation.authenticated === false) {
             console.log("not authenticated")
-        } else if (roomParticipants.inRoom === false) {
+        } else if (roomInformation.inRoom === false) {
             console.log("not in room")
         } else {
-            console.log(roomParticipants)
-            userId = roomParticipants.userId;
+            document.getElementById("connectionState").innerHTML = "Connected as: " + roomInformation.username;
+            userId = roomInformation.userId;
         }
     } catch (e) {
         console.log("Server is broken boiii");

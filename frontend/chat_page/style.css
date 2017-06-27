@@ -17,10 +17,6 @@ body {
     top: 80%;
 }
 
-#connectionState {
-    left: 80%;
-}
-
 #main {
     background-color: white;
     position: absolute;
@@ -64,6 +60,15 @@ body {
 table {
     width: 100%;
     border-collapse: collapse;
+}
+
+#connectedAs {
+    margin-top: 2%;
+    margin-left: 2%;
+    font-weight: lighter;
+    color: white;
+    max-width: 30%;
+    float: left;
 }
 
 div.table-title {
@@ -132,10 +137,6 @@ td {
     background-color: #FFF;
     padding: 15px;
     text-align: center;
-}
-#connectedAs {
-    font-weight: lighter;
-    color: white;
 }
 
 #join_chat {
