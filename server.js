@@ -123,9 +123,20 @@ app.post("/chat_page/join_room", (req, res) => {
             if (room_password === password) {
                 chatrooms.forEach((item) => {
                     if (item.id === roomId) {
-                        console.log("user: " + userId + " joined room " + roomId);
-                        pendingConnections.push({userId: userId, roomId: roomId});
-                        res.json({joined_room: true});
+                        let alreadyHasPendingConnection = false;
+                        for (let i = 0; i < pendingConnections.length; i++) {
+                            if (pendingConnections[i].userId === userId) {
+                                alreadyHasPendingConnection = true;
+                            }
+                        }
+                        if (!alreadyHasPendingConnection) {
+                            console.log("user: " + userId + " joined room " + roomId);
+                            pendingConnections.push({userId: userId, roomId: roomId});
+                            res.json({joined_room: true});
+                        } else {
+                            console.log("already has pending connection");
+                            res.json({joined_room: true});
+                        }
                     }
                 })
             }
@@ -166,12 +177,15 @@ app.ws('/chat_page/room', (ws, req) => {
 
         // Opens up a webscocket connection if the user is in the pending connections array
         // If his id is found in the array, he gets deleted from pending connections
-        // And added to the room.participants array in the from: {id:<userId>, ws:<newly created ws connection>}
+        // And added to the room.participants array in the from: {userId:<userId>, ws:<newly created ws connection>}
         getRoom(roomId, (room) => {
             for (let i = 0; i < pendingConnections.length; i++) {
                 if (pendingConnections[i].userId === userId &&
                     pendingConnections[i].roomId === roomId) {
-                    room.participants.push({userId: userId, ws: ws});
+                    console.log(pendingConnections);
+                    if (room.participants.userId === undefined) {
+                        room.participants.push({userId: userId, ws: ws});
+                    }
                     pendingConnections.splice(i, 1);
                 }
             }
