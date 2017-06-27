@@ -105,32 +105,31 @@ a {
     overflow-y: scroll;
 }
 
-.other {
+.message_content {
+    word-wrap: break-word;
+}
+
+li {
     list-style: none;
+}
+
+.other {
     margin-left: 2%;
 }
 
 .own {
-    text-align: left;
-    list-style: none;
-}
-
-.message_content {
-    word-wrap: break-word;
-    white-space: normal;
-    max-width: 70%;
+    float: right;
+    max-width: 60%;
+    clear:both;
+    margin-right: 2%;
 }
 
 .other .message_content {
-    left: 0;
-    margin-right: 40%;
+    margin-right: 50%;
     margin-left: 2%;
 }
 
 .own .message_content {
-    right: 0;
-    margin-left: 40%;
-    margin-right: 2%;
 }
 
 .other .senderInfo {
@@ -140,7 +139,8 @@ a {
 }
 
 .own .senderInfo {
-    right: 0;
-    margin-left: 43%;
+    white-space:nowrap;
     font-size: 10px;
+    text-align: right;
+    margin-right: 2%;
 }

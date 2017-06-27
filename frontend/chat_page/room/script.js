@@ -36,20 +36,30 @@ function sendMessage() {
     ws.send(message);
 }
 
-function displayMessage(message, senderId) {
+function displayMessage(message, senderId, senderName) {
     const table = document.getElementById("table");
     const row = document.createElement("li");
+    const senderInfo = document.createElement("P");
+    let date = new Date();
+    const currentTime = ("0" + date.getHours().toString()).slice(-2) + ":" +
+        ("0" + date.getMinutes().toString()).slice(-2) + ":" +
+        ("0" + date.getSeconds().toString()).slice(-2);
+
     if (senderId === userId) {
         row.className = "own";
+        senderInfo.appendChild(document.createTextNode("You: " + currentTime));
     } else {
         row.className = "other";
+        senderInfo.appendChild(document.createTextNode(senderName + ": " + currentTime));
     }
 
     let paragraph = document.createElement("P");
     paragraph.className = "message_content";
+    senderInfo.className = "senderInfo";
     const text = document.createTextNode(message);
     paragraph.appendChild(text);
     row.appendChild(paragraph);
+    row.appendChild(senderInfo);
 
     table.appendChild(row);
 }
@@ -58,7 +68,8 @@ ws.addEventListener("message", function (event) {
     const message = JSON.parse(event.data);
     const senderId = message.senderId;
     const text = message.text;
-    displayMessage(text, senderId)
+    const senderName = message.senderName;
+    displayMessage(text, senderId, senderName)
 });
 
 function httpRequest(path, method, callback) {

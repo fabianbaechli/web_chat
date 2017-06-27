@@ -186,7 +186,11 @@ app.ws('/chat_page/room', (ws, req) => {
                     console.log("\t to user: " + user.userId);
                     try {
                         if (user.ws !== undefined) {
-                            user.ws.send(JSON.stringify({text: msg, senderId: userId}));
+                            user.ws.send(JSON.stringify({
+                                text: msg,
+                                senderId: userId,
+                                senderName: findUsername(userId)
+                            }));
                         }
                     } catch (e) {
                         console.log("user: " + user.userId + " not available");
@@ -197,7 +201,7 @@ app.ws('/chat_page/room', (ws, req) => {
 
         // Deletes the user from the room.participants array
         // Puts the user in the pendingConnections array
-            // So that if he reopens the tab he gets reconnected
+        // So that if he reopens the tab he gets reconnected
         ws.on('close', () => {
             getRoom(roomId, (room) => {
                 for (let i = 0; i < room.participants.length; i++) {
