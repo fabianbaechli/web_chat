@@ -15,6 +15,7 @@ document.addEventListener('keyup', (event) => {
 httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
     try {
         roomInformation = JSON.parse(response);
+        console.log(roomInformation);
         if (roomInformation.authenticated === false) {
             console.log("not authenticated")
         } else if (roomInformation.inRoom === false) {
@@ -62,6 +63,7 @@ function displayMessage(message, senderId, senderName) {
     row.appendChild(senderInfo);
 
     table.appendChild(row);
+    table.scrollTop = table.scrollHeight;
 }
 
 ws.addEventListener("message", function (event) {

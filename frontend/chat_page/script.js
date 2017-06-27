@@ -95,13 +95,13 @@ function displayContent(content) {
     }
     row.style.backgroundColor = "#B0BEC5";
     row.className = "entry";
+    row.style.cursor = "pointer";
 
     row.onclick = () => {
         toggle_visibility('joinChatPopUp');
         let submitButton = document.getElementById("joinChatButton");
 
         submitButton.onclick = () => {
-            console.log(document.getElementById("passwordField").value);
             const passwordValue = document.getElementById("passwordField").value;
             joinChat(row.firstChild.innerText, passwordValue);
         }

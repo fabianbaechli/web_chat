@@ -8,6 +8,7 @@ const auth = require("./auth.js");
 const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
 const ws = require('express-ws')(app);
+const fileDownloader = require("./fileDownloader.js");
 let chatrooms;
 // contains objects in this form {useId: <value>, chatroom: <value>}
 let pendingConnections = [];
@@ -16,6 +17,14 @@ require('dotenv').config();
 
 getAllUsers((results) => {
     users = results;
+    for (let i = 0; i < users.length; i++) {
+        let imageEnding = users[i].image.split(".");
+        // image ending
+        imageEnding = imageEnding[imageEnding.length - 1];
+        fileDownloader(users[i].image, "user_images/" + users[i].userId + "." + imageEnding, function () {
+            console.log(users[i].image);
+        });
+    }
 });
 
 getAllChatRooms((results) => {
@@ -165,7 +174,11 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
                 getAllUsersInRoom(roomId, (users) => {
                     let response = [];
                     users.forEach((user) => {
-                        response.push(findUsername(user.userId))
+                        response.push({
+                            username: findUsername(user.userId),
+                            userId: user.userId,
+                            image: user.image
+                        })
                     });
                     res.send({users: response, userId: userId, username: findUsername(userId)});
                 });
@@ -285,7 +298,7 @@ function findUsername(id) {
 
 // DB queries
 function getAllUsers(callback) {
-    const queryString = "select id as userId, user_name as name from users";
+    const queryString = "select id as userId, user_name as name, image_path as image from users";
 
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
