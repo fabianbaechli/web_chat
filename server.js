@@ -186,7 +186,7 @@ app.ws('/chat_page/room', (ws, req) => {
                     console.log("\t to user: " + user.userId);
                     try {
                         if (user.ws !== undefined) {
-                            user.ws.send({text: msg, senderId: userId});
+                            user.ws.send(JSON.stringify({text: msg, senderId: userId}));
                         }
                     } catch (e) {
                         console.log("user: " + user.userId + " not available");

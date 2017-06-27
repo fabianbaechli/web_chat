@@ -132,3 +132,15 @@ a {
     margin-left: 40%;
     margin-right: 2%;
 }
+
+.other .senderInfo {
+    left: 0;
+    margin-left: 5%;
+    font-size: 10px;
+}
+
+.own .senderInfo {
+    right: 0;
+    margin-left: 43%;
+    font-size: 10px;
+}

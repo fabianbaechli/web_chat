@@ -58,11 +58,6 @@ ws.addEventListener("message", function (event) {
     const message = JSON.parse(event.data);
     const senderId = message.senderId;
     const text = message.text;
-    console.log("-------");
-    console.log(senderId);
-    console.log(text);
-    console.log(userId);
-    console.log("-------");
     displayMessage(text, senderId)
 });
 
