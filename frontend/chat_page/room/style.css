@@ -115,31 +115,27 @@ li {
 
 .other {
     margin-left: 2%;
+    float: left;
+    max-width: 60%;
+    clear: both;
 }
 
 .own {
     float: right;
     max-width: 60%;
-    clear:both;
+    clear: both;
     margin-right: 2%;
 }
 
-.other .message_content {
-    margin-right: 50%;
+.other .senderInfo {
+    white-space: nowrap;
+    font-size: 10px;
+    text-align: left;
     margin-left: 2%;
 }
 
-.own .message_content {
-}
-
-.other .senderInfo {
-    left: 0;
-    margin-left: 5%;
-    font-size: 10px;
-}
-
 .own .senderInfo {
-    white-space:nowrap;
+    white-space: nowrap;
     font-size: 10px;
     text-align: right;
     margin-right: 2%;

@@ -14,10 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(userInfo);
     console.log(content);
     if (userInfo.authenticated) {
+        document.getElementById("connectedAs").innerHTML = "Logged in as: " + userInfo.username;
         for (let i = 0; i < Object.keys(content).length; i++) {
             displayContent(content[i]);
         }
     } else {
+        document.getElementById("connectedAs").innerHTML = "Not Authenticated";
         console.log("not authenticated hombre");
     }
 });

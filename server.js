@@ -96,6 +96,12 @@ app.post("/chat_page/create_chat_room", (req, res) => {
 
             createChatRoom(maxParticipants, userId, password, roomName, (results) => {
                 res.redirect("/chat_page/");
+                getAllChatRooms((results) => {
+                    chatrooms = results;
+                    chatrooms.map((room) => {
+                        room.participants = [];
+                    });
+                });
             });
         } else {
             res.json({user_authenticated: false})
@@ -124,8 +130,10 @@ app.post("/chat_page/join_room", (req, res) => {
                 chatrooms.forEach((item) => {
                     if (item.id === roomId) {
                         let alreadyHasPendingConnection = false;
+                        // Checks if the user already has a pending connection
                         for (let i = 0; i < pendingConnections.length; i++) {
-                            if (pendingConnections[i].userId === userId) {
+                            if (pendingConnections[i].userId === userId &&
+                                pendingConnections[i].roomId === roomId) {
                                 alreadyHasPendingConnection = true;
                             }
                         }

@@ -4,9 +4,11 @@ body {
     width: 100%;
     font-family: 'roboto', sans-serif;
 }
+
 .button {
     outline: none;
 }
+
 #entryButtonArea {
     width: 60px;
     height: 60px;
@@ -14,6 +16,7 @@ body {
     left: 90%;
     top: 80%;
 }
+
 #connectionState {
     left: 80%;
 }
@@ -59,29 +62,59 @@ body {
 }
 
 table {
-    width: 96%;
+    width: 100%;
     border-collapse: collapse;
-    max-height: 100%;
+}
+
+div.table-title {
+    display: block;
+    margin: auto;
+    padding: 5px;
+    width: 100%;
+}
+
+.table-fill {
+    background: white;
+    margin: auto;
+    padding: 5px;
+    width: 100%;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    animation: float 5s infinite;
 }
 
 th {
-    font-weight: bold;
+    color: #9E9E9E;
+    border-bottom: 1px solid #9E9E9E;
+    padding: 16px 16px 16px 30px;
+    font-weight: 200;
+    text-align: left;
+}
+
+tr {
+    color: black;
+    font-weight: lighter;
+}
+
+tr:hover td {
+    background: #90CAF9;
+    color: #FFFFFF;
+}
+
+tr:nth-child(odd) td {
+    background: #EBEBEB;
+}
+
+tr:nth-child(odd):hover td {
+    background: #90CAF9;
 }
 
 td {
-    font-weight: lighter;
-    border-bottom: 1px solid white;
-}
-.entry:hover {
-    background-color: black;
-}
-td, th {
-    margin-left: 2%;
+    background: #FFFFFF;
+    padding: 12px 12px 12px 30px;
     text-align: left;
-    height: 5%;
-    padding: 8px;
+    vertical-align: middle;
+    font-weight: 300;
 }
-
 .popupWrapper {
     top: 0;
     left: 0;
@@ -100,6 +133,11 @@ td, th {
     padding: 15px;
     text-align: center;
 }
+#connectedAs {
+    font-weight: lighter;
+    color: white;
+}
+
 #join_chat {
     width: 40%;
     height: 18%;
