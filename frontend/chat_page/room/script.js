@@ -26,11 +26,13 @@ httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
             document.getElementById("connectionState").innerHTML = "Connected as: " + roomInformation.username;
             userId = roomInformation.userId;
             roomParticipants = roomInformation.users;
+            /*
             for (let i = 0; i < roomParticipants.length; i++) {
                 let displayImage = document.createElement("img");
                 displayImage.src = roomParticipants[i].image;
                 document.body.appendChild(displayImage);
             }
+            */
         }
     } catch (e) {
         console.log("Server is broken boiii");

@@ -83,7 +83,6 @@ a {
 .chat {
     width: 100%;
     height: 75%;
-    top: 5%;
     position: relative;
 }
 
@@ -141,4 +140,36 @@ li {
     font-size: 10px;
     text-align: right;
     margin-right: 2%;
+}
+
+.userDisplay {
+    border-bottom: 1px solid #9E9E9E;
+    height: 15%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow-y: scroll;
+}
+.userDisplay .imageTextPair {
+    text-align: center;
+    float: left;
+    width: 9%;
+    height: 100%;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    margin-left: 1%;
+}
+.userDisplay .imageTextPair .userImage {
+    width: 75%;
+    height: auto;
+    max-width: 49px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.userDisplay .imageTextPair .userName {
+    font-size: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
 }
