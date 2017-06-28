@@ -43,7 +43,6 @@ app.post("/createUser", (req, res) => {
         (inputValidator.validateRetypedPassword(req.body.password, req.body.retypePassword)) &&
         (inputValidator.validateEmail(req.body.email)) &&
         (inputValidator.validateURL(req.body.image))) {
-        console.log("all good with input");
 
         // Prevents sql injections
         const fullName = db.escape(req.body.fullName);
@@ -127,27 +126,20 @@ app.post("/chat_page/join_room", (req, res) => {
             if (room_password === password) {
                 chatrooms.forEach((item) => {
                     if (item.id === roomId) {
-                        let alreadyHasPendingConnection = false;
-                        // Checks if the user already has a pending connection
-                        for (let i = 0; i < pendingConnections.length; i++) {
-                            if (pendingConnections[i].userId === userId &&
-                                pendingConnections[i].roomId === roomId) {
-                                alreadyHasPendingConnection = true;
+                        checkIfUserHasPendingConnection(roomId, userId, (alreadyHasPendingConnection) => {
+                            if (alreadyHasPendingConnection === false) {
+                                console.log("user: " + userId + " joined room " + roomId);
+                                pendingConnections.push({userId: userId, roomId: roomId});
+                                res.json({joined_room: true});
+                            } else {
+                                console.log("already has pending connection");
+                                res.json({joined_room: true});
                             }
-                        }
-                        if (!alreadyHasPendingConnection) {
-                            console.log("user: " + userId + " joined room " + roomId);
-                            pendingConnections.push({userId: userId, roomId: roomId});
-                            res.json({joined_room: true});
-                        } else {
-                            console.log("already has pending connection");
-                            res.json({joined_room: true});
-                        }
+                        })
                     }
                 })
             }
         });
-
     } else {
         res.json({user_authenticated: false})
     }
@@ -158,22 +150,18 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
         const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
 
-        checkIfUserIsInRoom(roomId, userId, (isInRoom) => {
-            if (isInRoom === true) {
-                getAllUsersInRoom(roomId, (users) => {
-                    let response = [];
-                    users.forEach((user) => {
-                        response.push({
-                            username: findUsername(user.userId),
-                            userId: user.userId,
-                            image: user.image
-                        })
-                    });
-                    res.send({users: response, userId: userId, username: findUsername(userId)});
-                });
-            } else {
-                res.json({inRoom: false});
-            }
+        getAllUsersInRoom(roomId, (users) => {
+            getRoom(roomId, (room) => {
+            });
+            let response = [];
+            users.forEach((user) => {
+                response.push({
+                    username: findUsername(user.userId),
+                    userId: user.userId,
+                    image: user.image
+                })
+            });
+            res.send({users: response, userId: userId, username: findUsername(userId)});
         });
     } else {
         res.json({authenticated: false})
@@ -189,16 +177,17 @@ app.ws('/chat_page/room', (ws, req) => {
         // If his id is found in the array, he gets deleted from pending connections
         // And added to the room.participants array in the from: {userId:<userId>, ws:<newly created ws connection>}
         getRoom(roomId, (room) => {
-            for (let i = 0; i < pendingConnections.length; i++) {
-                if (pendingConnections[i].userId === userId &&
-                    pendingConnections[i].roomId === roomId) {
-                    console.log(pendingConnections);
-                    if (room.participants.userId === undefined) {
-                        room.participants.push({userId: userId, ws: ws});
+            checkIfUserIsInRoom(roomId, userId, (isInRoom) => {
+                if (isInRoom === false) {
+                    for (let i = 0; i < pendingConnections.length; i++) {
+                        if (pendingConnections[i].userId === userId &&
+                            pendingConnections[i].roomId === roomId) {
+                            room.participants.push({userId: userId, ws: ws});
+                            pendingConnections.splice(i, 1);
+                        }
                     }
-                    pendingConnections.splice(i, 1);
                 }
-            }
+            })
         });
 
         // Figures out for which chatroom the message was
@@ -231,7 +220,11 @@ app.ws('/chat_page/room', (ws, req) => {
                 for (let i = 0; i < room.participants.length; i++) {
                     if (room.participants[i].userId === userId) {
                         room.participants.splice(i, 1);
-                        pendingConnections.push({userId: userId, roomId: roomId});
+                        checkIfUserHasPendingConnection(roomId, userId, (alreadyHasPendingConnection) => {
+                            if (alreadyHasPendingConnection === false) {
+                                pendingConnections.push({userId: userId, roomId: roomId});
+                            }
+                        })
                     }
                 }
             });
@@ -255,16 +248,29 @@ function getAllUsersInRoom(roomId, callback) {
 }
 function checkIfUserIsInRoom(roomId, userId, callback) {
     getRoom(roomId, (roomToCheck) => {
-        let isInRoom = false;
         // Iterates over all users in correct chat room
-        roomToCheck.participants.forEach((participant) => {
+        let isInRoom = false;
+        for (let i = 0; i < roomToCheck.participants.length; i++) {
             // The user is in the room
-            if (participant.userId === userId) {
+            if (roomToCheck.participants[i].userId === userId) {
                 isInRoom = true;
+                callback(isInRoom)
             }
-        });
-        callback(isInRoom);
+        }
+        callback(isInRoom)
     });
+}
+function checkIfUserHasPendingConnection(roomId, userId, callback) {
+    let alreadyHasPendingConnection = false;
+    // Checks if the user already has a pending connection
+    for (let i = 0; i < pendingConnections.length; i++) {
+        if (pendingConnections[i].userId === userId &&
+            pendingConnections[i].roomId === roomId) {
+
+            alreadyHasPendingConnection = true;
+        }
+    }
+    callback(alreadyHasPendingConnection)
 }
 function getRoom(roomId, callback) {
     // Iterates over all chat rooms

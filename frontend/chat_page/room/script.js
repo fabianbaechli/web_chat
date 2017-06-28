@@ -5,31 +5,35 @@ let userId;
 
 const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
+ws.onopen = function() {
+    console.log("ws open")
+    httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
+        console.log("requested users in room")
+        try {
+            roomInformation = JSON.parse(response);
+        } catch (e) {
+            console.log(e)
+        }
+        console.log(roomInformation)
+        if (roomInformation.authenticated === false) {
+            console.log("not authenticated")
+        } else if (roomInformation.inRoom === false) {
+            console.log("not in room")
+        } else {
+            document.getElementById("connectionState").innerHTML = "Connected as: " + roomInformation.username;
+            userId = roomInformation.userId;
+            roomParticipants = roomInformation.users;
+            displayUsers(roomParticipants)
+        }
+    });
+};
+
 document.addEventListener('keyup', (event) => {
     if (event.code === "Enter") {
         if (document.getElementById("inputArea") === document.activeElement) {
             event.preventDefault();
             sendMessage();
         }
-    }
-});
-
-httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
-    try {
-        roomInformation = JSON.parse(response);
-    } catch (e) {
-        console.log(e)
-    }
-    console.log(roomInformation);
-    if (roomInformation.authenticated === false) {
-        console.log("not authenticated")
-    } else if (roomInformation.inRoom === false) {
-        console.log("not in room")
-    } else {
-        document.getElementById("connectionState").innerHTML = "Connected as: " + roomInformation.username;
-        userId = roomInformation.userId;
-        roomParticipants = roomInformation.users;
-        displayUsers(roomParticipants)
     }
 });
 
@@ -61,6 +65,7 @@ function sendMessage() {
 }
 
 function displayMessage(message, senderId, senderName) {
+    console.log("received message: " + message);
     const table = document.getElementById("table");
     const row = document.createElement("li");
     const senderInfo = document.createElement("P");
