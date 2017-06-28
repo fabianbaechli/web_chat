@@ -159,7 +159,7 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
         const userId = req.session.userId;
 
         checkIfUserIsInRoom(roomId, userId, (isInRoom) => {
-            if (isInRoom) {
+            if (isInRoom === true) {
                 getAllUsersInRoom(roomId, (users) => {
                     let response = [];
                     users.forEach((user) => {

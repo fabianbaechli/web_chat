@@ -144,7 +144,9 @@ li {
 
 .userDisplay {
     border-bottom: 1px solid #9E9E9E;
+    text-align: center;
     height: 15%;
+    width: 100%;
     display: inline-block;
     white-space: nowrap;
     overflow-y: scroll;
