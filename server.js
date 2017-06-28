@@ -8,7 +8,6 @@ const auth = require("./auth.js");
 const db = require("./db.js");
 const inputValidator = require("./input_validation.js");
 const ws = require('express-ws')(app);
-const fileDownloader = require("./fileDownloader.js");
 let chatrooms;
 // contains objects in this form {useId: <value>, chatroom: <value>}
 let pendingConnections = [];
@@ -17,16 +16,7 @@ require('dotenv').config();
 
 getAllUsers((results) => {
     users = results;
-    for (let i = 0; i < users.length; i++) {
-        let imageEnding = users[i].image.split(".");
-        // image ending
-        imageEnding = imageEnding[imageEnding.length - 1];
-        fileDownloader(users[i].image, "user_images/" + users[i].userId + "." + imageEnding, function () {
-            console.log(users[i].image);
-        });
-    }
 });
-
 getAllChatRooms((results) => {
     chatrooms = results;
     chatrooms.map((room) => {
@@ -41,7 +31,6 @@ app.use(bodyParser.urlencoded({
 
 // Handles authentication
 app.use(auth.router);
-
 // All files in the frontend folder are available without a cookie
 app.use(express.static('frontend'));
 
@@ -103,7 +92,7 @@ app.post("/chat_page/create_chat_room", (req, res) => {
             let password = hash.x2(req.body.password);
             password = db.escape(password);
 
-            createChatRoom(maxParticipants, userId, password, roomName, (results) => {
+            createChatRoom(maxParticipants, userId, password, roomName, () => {
                 res.redirect("/chat_page/");
                 getAllChatRooms((results) => {
                     chatrooms = results;
@@ -196,7 +185,7 @@ app.ws('/chat_page/room', (ws, req) => {
         const roomId = parseInt(req.query.id);
         const userId = req.session.userId;
 
-        // Opens up a webscocket connection if the user is in the pending connections array
+        // Opens up a web socket connection if the user is in the pending connections array
         // If his id is found in the array, he gets deleted from pending connections
         // And added to the room.participants array in the from: {userId:<userId>, ws:<newly created ws connection>}
         getRoom(roomId, (room) => {
@@ -264,7 +253,6 @@ function getAllUsersInRoom(roomId, callback) {
         callback(response);
     });
 }
-
 function checkIfUserIsInRoom(roomId, userId, callback) {
     getRoom(roomId, (roomToCheck) => {
         let isInRoom = false;
@@ -278,7 +266,6 @@ function checkIfUserIsInRoom(roomId, userId, callback) {
         callback(isInRoom);
     });
 }
-
 function getRoom(roomId, callback) {
     // Iterates over all chat rooms
     for (let i = 0; i < chatrooms.length; i++) {
@@ -287,7 +274,6 @@ function getRoom(roomId, callback) {
         }
     }
 }
-
 function findUsername(id) {
     for (let i = 0; i < users.length; i++) {
         if (users[i].userId === id) {
