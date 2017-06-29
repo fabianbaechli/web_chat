@@ -5,7 +5,7 @@ let userId;
 
 const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
 
-ws.onopen = function() {
+ws.onopen = function () {
     console.log("ws open")
     httpRequest("/chat_page/room/users_in_room?id=" + id, "GET", (response) => {
         console.log("requested users in room")
@@ -28,11 +28,17 @@ ws.onopen = function() {
     });
 };
 
-document.addEventListener('keyup', (event) => {
-    if (event.code === "Enter") {
-        if (document.getElementById("inputArea") === document.activeElement) {
+document.addEventListener('input', (event) => {
+    if (document.getElementById("inputArea") === document.activeElement) {
+        if (event.code === "Enter") {
             event.preventDefault();
             sendMessage();
+        } else {
+            let textarea = document.getElementById("inputArea");
+            let heightLimit = 100;
+            textarea.style.height = 0;
+            textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "%";
+            console.log(textarea.scrollHeight)
         }
     }
 });

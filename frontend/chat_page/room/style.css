@@ -1,7 +1,9 @@
 html, body {
     background-color: #009688;
-    font-family: 'roboto', sans-serif;
-    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    height: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 ::selection {
@@ -46,22 +48,33 @@ a {
 }
 
 #inputArea {
-    font-size: 13px;
-    overflow: hidden;
+    font-size: 15px;
+    font-weight: normal;
     resize: none;
-    height: 70%;
     width: 60%;
     left: 10%;
+    height:25%;
+    min-height: 25%;
+    bottom: 30%;
+    padding: 2%;
     position: absolute;
-    min-width: 60%;
     outline: none;
+    border: 0 none white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    background-color: #F5F5F5;
+    color: #4B4B4B;
+}
+
+::-webkit-input-placeholder {
+    color: #4B4B4B;
 }
 
 #sendButton {
     font-size: 23px;
     position: relative;
     color: white;
-    left: 75%;
+    left: 80%;
     width: 50px;
     height: 50px;
     bottom: 2%;
@@ -88,7 +101,7 @@ a {
 
 #table {
     width: 100%;
-    height: 100%;
+    height: 85%;
     position: relative;
     -webkit-margin-before: 0;
     -webkit-margin-after: 0;
@@ -128,6 +141,7 @@ li {
     max-width: 30%;
     float: left;
 }
+
 .other .senderInfo {
     white-space: nowrap;
     font-size: 10px;
@@ -151,16 +165,18 @@ li {
     white-space: nowrap;
     overflow-y: scroll;
 }
+
 .userDisplay .imageTextPair {
     text-align: center;
     float: left;
     width: 9%;
     height: 100%;
-    overflow:hidden;
-    white-space:nowrap;
+    overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
     margin-left: 1%;
 }
+
 .userDisplay .imageTextPair .userImage {
     width: 75%;
     height: auto;

@@ -45,12 +45,11 @@ app.post("/createUser", (req, res) => {
         (inputValidator.validateURL(req.body.image))) {
 
         // Prevents sql injections
-        const fullName = db.escape(req.body.fullName);
-        const email = db.escape(req.body.email);
-        const username = db.escape(req.body.username);
-        const profilePicture = db.escape(req.body.image);
+        const fullName = req.body.fullName;
+        const email = req.body.email;
+        const username = req.body.username;
+        const profilePicture = req.body.image;
         let password = hash.x2(req.body.password);
-        password = db.escape(password);
 
         searchUser(username, (results) => {
             if (results.length === 0) {
@@ -59,6 +58,9 @@ app.post("/createUser", (req, res) => {
                     req.session.authenticated = true;
                     req.session.username = username;
                     req.session.userId = results.insertId;
+                    getAllUsers((results) => {
+                        users = results;
+                    });
                     res.redirect("/chat_page");
                 });
             } else {
@@ -86,10 +88,9 @@ app.post("/chat_page/create_chat_room", (req, res) => {
 
         if (req.session.authenticated === true) {
             const userId = req.session.userId;
-            const roomName = db.escape(req.body.roomName);
+            const roomName = req.body.roomName;
             const maxParticipants = Number(req.body.maxParticipants);
             let password = hash.x2(req.body.password);
-            password = db.escape(password);
 
             createChatRoom(maxParticipants, userId, password, roomName, () => {
                 res.redirect("/chat_page/");
@@ -151,8 +152,6 @@ app.get("/chat_page/room/users_in_room", (req, res) => {
         const userId = req.session.userId;
 
         getAllUsersInRoom(roomId, (users) => {
-            getRoom(roomId, (room) => {
-            });
             let response = [];
             users.forEach((user) => {
                 response.push({
@@ -299,7 +298,7 @@ function getAllUsers(callback) {
 }
 function createChatRoom(maxParticipants, userId, password, roomName, callback) {
     const queryString = "INSERT INTO chat_room (max_participants, admin, password, room_name) VALUES " +
-        "(" + maxParticipants + "," + userId + "," + password + "," + roomName + ")";
+        "(" + db.escape(maxParticipants) + "," + db.escape(userId) + "," + db.escape(password) + "," + db.escape(roomName) + ")";
 
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
@@ -307,7 +306,7 @@ function createChatRoom(maxParticipants, userId, password, roomName, callback) {
     });
 }
 function getRoomPassword(roomId, callback) {
-    const queryString = "SELECT password FROM chat_room WHERE id = " + roomId + "";
+    const queryString = "SELECT password FROM chat_room WHERE id = " + db.escape(roomId) + "";
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
         else callback(results[0].password);
@@ -323,7 +322,7 @@ function getAllChatRooms(callback) {
     });
 }
 function searchUser(username, callback) {
-    const queryString = "SELECT * FROM users WHERE user_name = " + username;
+    const queryString = "SELECT * FROM users WHERE user_name = " + db.escape(username);
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
         else callback(results);
@@ -331,7 +330,8 @@ function searchUser(username, callback) {
 }
 function createUser(fullName, username, password, email, profilePicture, callback) {
     let queryString = "INSERT INTO users (full_name, user_name, password, email, image_path, online) VALUES " +
-        "(" + fullName + "," + username + "," + password + "," + email + "," + profilePicture + "," + 1 + ")";
+        "(" + db.escape(fullName) + "," + db.escape(username) + "," + db.escape(password) + "," + db.escape(email) + "," +
+        db.escape(profilePicture) + "," + 1 + ")";
     db.query(queryString, (error, results) => {
         if (error) console.log(error);
         else callback(results);
