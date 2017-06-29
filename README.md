@@ -20,7 +20,7 @@ Message distribution in the chat rooms is handled via websockets.
 - Receiving all messages of the participants in the room after the join.
 - Closing the tab with the active chat room session and reopening that tab and being reconnected to that room without entering the password once again
 
-## Backend
+### Backend
 - Creating a user in the Mysql database
    * Server side input validation
    * Input gets escaped before being written in the database
