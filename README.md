@@ -85,8 +85,9 @@ Since the whole realisation of the project occured on github I encourage you to 
 - Displaying participants with user images works
 
 ## Contributors
-Sole contributor of the project is Fabian Bächli <br>
-fabian.baechli@edu.tbz.ch
+
+- Fabian Bächli [@fabianbaechli](https://github.com/fabianbaechli) Project Author, Lead Developer
+- Leonard Schütz [@KCreate](https://github.com/KCreate) Occasional help with tricky parts of the code
 
 ## License
 Copyright 2017 Fabian Bächli
