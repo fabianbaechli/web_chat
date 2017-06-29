@@ -1,6 +1,6 @@
 # Documentation web_chat
 ## Short Summary
-Web_chat is an online chat application. The backend is written in __Node.js__ with the help of the __express frameworks__ and of course some more other. <br>
+Web_chat is an online chat application. The backend is written in __Node.js__ with the help of the __express frameworks__ and of course some other aswell. <br>
 The frontend is handcrafted with the __google material design specifications__ in mind. Also, no fancy frontend frameworks were used <br>
 It is __user based.__ At the time of writing this, the chatting is only possible in chat rooms -> No private chats. The chatrooms are however __secured via a password.__ So you could theoretically chat private if you'd only share the key for a certain room with a certain person. I do __plan on implementing private chats in the near future.__ <br>
 Message distribution in the chat rooms is handled via websockets.
