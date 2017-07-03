@@ -23,7 +23,7 @@
 <div class="popupWrapper" id="newChat">
     <div id="popupBoxContent">
         <h3>Create a new Chat Room!</h3>
-        <form onsubmit="return checkForm()" action="http://localhost:8080/chat_page/create_chat_room"
+        <form onsubmit="return checkForm()" action="/chat_page/create_chat_room"
               method="post">
             <input id="roomNameTextField" name="roomName" placeholder="Room Name" type="text"
                    onchange="validateRoomName()" required="">

@@ -3,7 +3,8 @@ let roomInformation = {};
 let roomParticipants = {};
 let userId;
 
-const ws = new WebSocket('ws://localhost:8080/chat_page/room?id=' + id, 'echo-protocol');
+let protocol = "ws://";
+const ws = new WebSocket(protocol + window.location.host + '/chat_page/room?id=' + id, 'echo-protocol');
 
 ws.onopen = function () {
     console.log("ws open")

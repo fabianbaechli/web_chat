@@ -48,14 +48,14 @@ function checkForm() {
 
 function joinChat(id, password) {
     const http = new XMLHttpRequest();
-    const url = "http://localhost:8080/chat_page/join_room";
+    const url = "/chat_page/join_room";
     const params = "id=" + id + "&password=" + password;
     http.open("POST", url, true);
 
     http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     http.onreadystatechange = function () {
         if (http.readyState == 4 && http.status == 200) {
-            window.location.href = "http://localhost:8080/chat_page/room?id=" + id;
+            window.location.href = "/chat_page/room?id=" + id;
         }
     };
     http.send(params);
