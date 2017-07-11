@@ -39,7 +39,6 @@ document.addEventListener('input', (event) => {
             let heightLimit = 100;
             textarea.style.height = 0;
             textarea.style.height = Math.min(textarea.scrollHeight, heightLimit) + "%";
-            console.log(textarea.scrollHeight)
         }
     }
 });
